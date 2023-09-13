@@ -1,21 +1,16 @@
 import pygame
 import sys
 
+from etc.button import Button
 from etc.text import TextBox
 
 
 class MainMenu:
-    _TitleColors = ["black", "yellow", "green"]
-    _TitleChangeSec = 1
+    _TitleColors = ["red", "blue"]
+    _TitleChangeSec = 0.5
 
     def __init__(self, screen):
-        self.screen = screen
-
-        width, height = pygame.display.get_surface().get_size()
-        titleCenter = (width / 2, height / 5)
-        self.titleBox = TextBox(screen, titleCenter)
-        self.lastTitleIdx = 0
-        self.lastTickTime = pygame.time.get_ticks()
+        self._screen = screen
 
         # 게임 한판 끝나면, 다시 메뉴로 돌아오면서 다시 시작
         while True:
@@ -23,10 +18,18 @@ class MainMenu:
 
     # 메인 메뉴의 시작. 기본 설정만 하고, run!
     def _start(self):
+        # 배경 설정
         pygame.display.set_caption("main menu")
-        self.screen.fill("white")
-        self._printTitle()
+        self._screen.fill("white")
         pygame.display.update()
+
+        # 타이틀 설정
+        width, height = pygame.display.get_surface().get_size()
+        titleCenter = (width / 2, height / 5)
+        self.titleBox = TextBox(self._screen, titleCenter)
+        self.lastTitleIdx = 0
+        self.lastTickTime = pygame.time.get_ticks()
+        self._printTitle()
 
         self._run()
 

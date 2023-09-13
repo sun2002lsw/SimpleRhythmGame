@@ -1,8 +1,13 @@
 import pygame
-import sys
 
 from etc.button import Button
+from etc.func import ExitGame
 from etc.text import TextBox
+
+
+# 더미 함수
+def _dummy():
+    pass
 
 
 class MainMenu:
@@ -19,7 +24,6 @@ class MainMenu:
     # 메인 메뉴의 시작. 기본 설정만 하고, run!
     def _start(self):
         # 배경 설정
-        pygame.display.set_caption("main menu")
         self._screen.fill("white")
         pygame.display.update()
 
@@ -29,9 +33,9 @@ class MainMenu:
 
         # 버튼들 설정
         self._buttons = []
-        self._createButton(width / 2, height * (3 / 6), "게임 시작")
-        self._createButton(width / 2, height * (4 / 6), "자동 사냥")
-        self._createButton(width / 2, height * (5 / 6), "나가기")
+        self._createButton(width / 2, height * (3 / 6), "게임 시작", _dummy)
+        self._createButton(width / 2, height * (4 / 6), "자동 사냥", _dummy)
+        self._createButton(width / 2, height * (5 / 6), "나가기", ExitGame)
 
         self._run()
 
@@ -48,7 +52,7 @@ class MainMenu:
                     sys.exit()
 
                 if event.type == pygame.MOUSEBUTTONUP:
-                    self._handleButtonHovering(mousePos)
+                    self._handleButtonClick(mousePos)
                 elif event.type == pygame.MOUSEBUTTONDOWN or mouseLeftPressMove:
                     self._handleButtonPressing(mousePos)
                 else:
@@ -82,8 +86,8 @@ class MainMenu:
         self.titleBox.Print("예찬쌤의 리듬 게임", 100, color)
 
     # 버튼 추가
-    def _createButton(self, x, y, text):
-        button = Button(self._screen, x, y, text)
+    def _createButton(self, x, y, text, clickFunc):
+        button = Button(self._screen, x, y, text, clickFunc)
         self._buttons.append(button)
 
     # 마우스를 버튼 위에 올렸을 때 처리
@@ -95,4 +99,8 @@ class MainMenu:
     def _handleButtonPressing(self, mousePos):
         for button in self._buttons:
             button.Pressing(mousePos)
-    
+
+    # 마우스를 클릭 했을 때 처리
+    def _handleButtonClick(self, mousePos):
+        for button in self._buttons:
+            button.Click(mousePos)

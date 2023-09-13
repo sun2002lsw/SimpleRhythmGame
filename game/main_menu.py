@@ -1,13 +1,8 @@
 import pygame
 
-from etc.button import Button
 from etc.func import ExitGame
-from etc.text import TextBox
-
-
-# 더미 함수
-def _dummy():
-    pass
+from ui.button import Button
+from ui.text import TextBox
 
 
 class MainMenu:
@@ -34,7 +29,7 @@ class MainMenu:
         # 버튼들 설정
         self._buttons = []
         self._createButton(width / 2, height * (3 / 6), "게임 시작", _dummy)
-        self._createButton(width / 2, height * (4 / 6), "자동 사냥", _dummy)
+        self._createButton(width / 2, height * (4 / 6), "자동 사냥", None)
         self._createButton(width / 2, height * (5 / 6), "나가기", ExitGame)
 
         self._run()

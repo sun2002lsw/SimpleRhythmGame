@@ -25,7 +25,13 @@ class MainMenu:
 
         # 타이틀 설정
         width, height = pygame.display.get_surface().get_size()
-        self._createTitle(width / 2, height / 5)
+        self._createTitle(width / 2, height / 4)
+
+        # 버튼들 설정
+        self._buttons = []
+        self._createButton(width / 2, height * (3 / 6), "게임 시작")
+        self._createButton(width / 2, height * (4 / 6), "자동 사냥")
+        self._createButton(width / 2, height * (5 / 6), "나가기")
 
         self._run()
 
@@ -63,4 +69,9 @@ class MainMenu:
 
     def _printTitle(self):
         color = self._TitleColors[self.lastTitleIdx]
-        self.titleBox.Print("둠칫 둠칫 리듬 게임", 30, color)
+        self.titleBox.Print("예찬쌤의 리듬 게임", 100, color)
+
+    # 버튼 추가
+    def _createButton(self, x, y, text):
+        button = Button(self._screen, x, y, text)
+        self._buttons.append(button)

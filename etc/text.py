@@ -2,9 +2,9 @@ import pygame
 
 
 class TextBox:
-    def __init__(self, screen, center):
+    def __init__(self, screen, x, y):
         self._screen = screen
-        self._center = center
+        self._center = (x, y)
 
     def Print(self, text, size, color):
         font = pygame.font.SysFont("malgungothic", size, True, False)

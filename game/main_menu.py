@@ -25,11 +25,7 @@ class MainMenu:
 
         # 타이틀 설정
         width, height = pygame.display.get_surface().get_size()
-        titleCenter = (width / 2, height / 5)
-        self.titleBox = TextBox(self._screen, titleCenter)
-        self.lastTitleIdx = 0
-        self.lastTickTime = pygame.time.get_ticks()
-        self._printTitle()
+        self._createTitle(width / 2, height / 5)
 
         self._run()
 
@@ -41,13 +37,15 @@ class MainMenu:
                     pygame.quit()
                     sys.exit()
                 if event.type == pygame.MOUSEBUTTONUP:
-                    if self._checkButtonClick():
-                        return
+                    return
 
             self._changeTitleColor()
 
-    def _checkButtonClick(self):
-        pass
+    def _createTitle(self, x, y):
+        self.titleBox = TextBox(self._screen, x, y)
+        self.lastTitleIdx = 0
+        self.lastTickTime = pygame.time.get_ticks()
+        self._printTitle()
 
     # 제목을 반짝 반짝 꾸며줌
     def _changeTitleColor(self):

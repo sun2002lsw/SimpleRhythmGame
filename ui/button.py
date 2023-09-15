@@ -11,51 +11,51 @@ class Button:
         self._text = text
         self._clickFunc = clickFunc
 
-        self._setButtonSize(BUTTON_SIZE)
-        self._drawDefaultButton()
+        self._SetButtonSize(BUTTON_SIZE)
+        self._DrawDefaultButton()
         self._defaultState = True
 
     # 마우스를 버튼 위에 올렸을 때
     def Hovering(self, mousePos):
-        if not self._isInsideButton(mousePos):
+        if not self._IsInsideButton(mousePos):
             if not self._defaultState:
-                self._drawDefaultButton()
+                self._DrawDefaultButton()
             return
 
-        self._drawActiveButton(30)
+        self._DrawActiveButton(30)
 
     # 마우스를 누른채 버튼 위에 올렸을 때
     def Pressing(self, mousePos):
-        if not self._isInsideButton(mousePos):
+        if not self._IsInsideButton(mousePos):
             if not self._defaultState:
-                self._drawDefaultButton()
+                self._DrawDefaultButton()
             return
 
-        self._drawActiveButton(25)
+        self._DrawActiveButton(25)
 
     # 마우스를 클릭 했을 때
     def Click(self, mousePos):
-        if not self._isInsideButton(mousePos):
+        if not self._IsInsideButton(mousePos):
             return False
 
-        self._drawActiveButton(35)
+        self._DrawActiveButton(35)
         self._clickFunc()
         return True
 
     # 버튼 생성
-    def _drawDefaultButton(self):
+    def _DrawDefaultButton(self):
         self._defaultState = True
-        self._drawButton(30, "black", (0, 128, 0), False)
+        self._DrawButton(30, "black", (0, 128, 0), False)
 
-    def _drawActiveButton(self, textSize):
+    def _DrawActiveButton(self, textSize):
         self._defaultState = False
-        self._drawButton(textSize, "white", (0, 128, 0), True)
+        self._DrawButton(textSize, "white", (0, 128, 0), True)
 
-    def _drawFadeoutButton(self):
+    def _DrawFadeoutButton(self):
         self._defaultState = False
-        self._drawButton(35, "white", (0, 0, 0), True)
+        self._DrawButton(35, "white", (0, 0, 0), True)
 
-    def _drawButton(self, textSize, textColor, backgroundColor, isBold):
+    def _DrawButton(self, textSize, textColor, backgroundColor, isBold):
         font = pygame.font.SysFont("malgungothic", textSize, isBold, False)
         surface = font.render(self._text, True, textColor)
         textRect = surface.get_rect()
@@ -67,7 +67,7 @@ class Button:
         pygame.display.update(self._buttonRect)
 
     # x, y 좌표가 버튼에 들어왔는지 확인
-    def _isInsideButton(self, mousePos):
+    def _IsInsideButton(self, mousePos):
         x = mousePos[0]
         y = mousePos[1]
 
@@ -78,7 +78,7 @@ class Button:
 
         return True
 
-    def _setButtonSize(self, buttonSize):
+    def _SetButtonSize(self, buttonSize):
         left = self._x - buttonSize
         top = self._y - buttonSize / 3
         width = buttonSize * 2

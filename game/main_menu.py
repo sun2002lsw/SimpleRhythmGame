@@ -1,4 +1,5 @@
 import pygame
+import sys
 
 from etc.func import ExitGame
 from ui.button import Button
@@ -11,6 +12,10 @@ class MainMenu:
 
     def __init__(self, screen):
         self._screen = screen
+        
+        width, height = pygame.display.get_surface().get_size()
+        self._width = width
+        self._height = height
 
         # 게임 한판 끝나면, 다시 메뉴로 돌아오면서 다시 시작
         while True:
@@ -23,14 +28,13 @@ class MainMenu:
         pygame.display.update()
 
         # 타이틀 설정
-        width, height = pygame.display.get_surface().get_size()
-        self._createTitle(width / 2, height / 4)
+        self._createTitle()
 
         # 버튼들 설정
         self._buttons = []
-        self._createButton(width / 2, height * (3 / 6), "게임 시작", _dummy)
-        self._createButton(width / 2, height * (4 / 6), "자동 사냥", None)
-        self._createButton(width / 2, height * (5 / 6), "나가기", ExitGame)
+        self._createButton(self._width / 2, self._height * (3 / 6), "게임 시작", None)
+        self._createButton(self._width / 2, self._height * (4 / 6), "자동 사냥", None)
+        self._createButton(self._width / 2, self._height * (5 / 6), "나가기", ExitGame)
 
         self._run()
 
@@ -56,7 +60,10 @@ class MainMenu:
             # 타이틀은 계속 깜빡 깜빡
             self._changeTitleColor()
 
-    def _createTitle(self, x, y):
+    def _createTitle(self):
+        x = self._width / 2
+        y = self._height / 4
+
         self.titleBox = TextBox(self._screen, x, y)
         self._lastTitleColorIdx = 0
         self._lastTitleColorTick = pygame.time.get_ticks()

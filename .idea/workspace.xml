@@ -5,11 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="68e6348c-de41-4f95-a867-efa448a7c93b" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/game/rhythm_game.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/etc/button.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/button.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/etc/text.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/text.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/game/music/note.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/game/music/sheet.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/etc/func.py" beforeDir="false" afterPath="$PROJECT_DIR$/etc/func.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game/main_menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/game/main_menu.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/rhythm_game.py" beforeDir="false" afterPath="$PROJECT_DIR$/game/rhythm_game.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -1,9 +1,9 @@
 import pygame
 import sys
 
-from etc.func import ExitGame
-from ui.button import Button
-from ui.text import TextBox
+import etc
+import ui
+from . import RhythmGame
 
 
 class MainMenu:
@@ -12,7 +12,7 @@ class MainMenu:
 
     def __init__(self, screen):
         self._screen = screen
-        
+
         width, height = pygame.display.get_surface().get_size()
         self._width = width
         self._height = height
@@ -32,9 +32,9 @@ class MainMenu:
 
         # 버튼들 설정
         self._buttons = []
-        self._createButton(self._width / 2, self._height * (3 / 6), "게임 시작", None)
+        self._createButton(self._width / 2, self._height * (3 / 6), "게임 시작", self._startRhythmGame)
         self._createButton(self._width / 2, self._height * (4 / 6), "자동 사냥", None)
-        self._createButton(self._width / 2, self._height * (5 / 6), "나가기", ExitGame)
+        self._createButton(self._width / 2, self._height * (5 / 6), "나가기", etc.ExitGame)
 
         self._run()
 
@@ -64,7 +64,7 @@ class MainMenu:
         x = self._width / 2
         y = self._height / 4
 
-        self.titleBox = TextBox(self._screen, x, y)
+        self.titleBox = ui.TextBox(self._screen, x, y)
         self._lastTitleColorIdx = 0
         self._lastTitleColorTick = pygame.time.get_ticks()
         self._printTitle()
@@ -89,7 +89,7 @@ class MainMenu:
 
     # 버튼 추가
     def _createButton(self, x, y, text, clickFunc):
-        button = Button(self._screen, x, y, text, clickFunc)
+        button = ui.Button(self._screen, x, y, text, clickFunc)
         self._buttons.append(button)
 
     # 마우스를 버튼 위에 올렸을 때 처리
@@ -106,3 +106,7 @@ class MainMenu:
     def _handleButtonClick(self, mousePos):
         for button in self._buttons:
             button.Click(mousePos)
+
+    # 리듬 게임 시작
+    def _startRhythmGame(self):
+        RhythmGame(self._screen)

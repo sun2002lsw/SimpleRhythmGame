@@ -5,11 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="68e6348c-de41-4f95-a867-efa448a7c93b" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/game/music/note.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game/music/sheet.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/etc/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/game/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/game/music/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ui/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/etc/func.py" beforeDir="false" afterPath="$PROJECT_DIR$/etc/func.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game/main_menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/game/main_menu.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/music/note.py" beforeDir="false" afterPath="$PROJECT_DIR$/game/music/note.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game/rhythm_game.py" beforeDir="false" afterPath="$PROJECT_DIR$/game/rhythm_game.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -83,5 +85,16 @@
       <updated>1694527060576</updated>
     </task>
     <servers />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <default-breakpoints>
+        <breakpoint type="python-exception">
+          <properties notifyOnTerminate="true" exception="BaseException">
+            <option name="notifyOnTerminate" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

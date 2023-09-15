@@ -21,6 +21,7 @@ class RhythmGame:
         self._laneCnt = 0
         self._dropSecIdx = 4
         self._gameStartTick = 0
+        self._finishGame = False
 
         self._start()
 
@@ -28,20 +29,25 @@ class RhythmGame:
     def _start(self):
         self._createSheet()
         self._laneCnt = self._sheet.GetLaneCnt()
+        self._gameStartTick = pygame.time.get_ticks()
 
         self._run()
 
     # 본격적인 게임 시작
     def _run(self):
-        self._gameStartTick = pygame.time.get_ticks()
-
         while True:
-            self._drawGame()
-
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
+
+                if event.key == pygame.K_ESCAPE:
+                    self._finishGame = True
+
+            if self._finishGame:
+                return  # 게임 끝남
+
+            self._drawGame()
 
     # 게임 화면 출력
     def _drawGame(self):

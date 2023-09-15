@@ -51,7 +51,8 @@ class MainMenu:
                     sys.exit()
 
                 if event.type == pygame.MOUSEBUTTONUP:
-                    self._handleButtonClick(mousePos)
+                    if self._handleButtonClick(mousePos):
+                        return  # 뭔가 행동 하나 진행. 처음부터 다시 시작하자
                 elif event.type == pygame.MOUSEBUTTONDOWN or mouseLeftPressMove:
                     self._handleButtonPressing(mousePos)
                 else:
@@ -105,7 +106,10 @@ class MainMenu:
     # 마우스를 클릭 했을 때 처리
     def _handleButtonClick(self, mousePos):
         for button in self._buttons:
-            button.Click(mousePos)
+            if button.Click(mousePos):
+                return True
+            
+        return False
 
     # 리듬 게임 시작
     def _startRhythmGame(self):

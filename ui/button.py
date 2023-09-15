@@ -36,10 +36,11 @@ class Button:
     # 마우스를 클릭 했을 때
     def Click(self, mousePos):
         if not self._isInsideButton(mousePos):
-            return
+            return False
 
         self._drawActiveButton(35)
         self._clickFunc()
+        return True
 
     # 버튼 생성
     def _drawDefaultButton(self):

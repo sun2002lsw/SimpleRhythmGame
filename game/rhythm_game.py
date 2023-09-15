@@ -1,6 +1,7 @@
 import pygame
 import sys
 
+import ui
 from . import music
 
 DropSecs = [5, 3, 2, 1.5, 1, 0.5, 0.3, 0.1]
@@ -20,11 +21,15 @@ class RhythmGame:
 
     # 기본 값들을 설정하고 게임 시작
     def _Start(self):
-        self._dropSecIdx = 0
+        self._currentSec = 0
+        self._dropSecIdx = 4
         self._finishGame = False
+        self._gameStartTick = pygame.time.get_ticks()
         self._sheet = music.SheetMaker().MakeSheet()
         self._laneCnt = self._sheet.GetLaneCnt()
-        self._gameStartTick = pygame.time.get_ticks()
+
+        self._timeTextBox = ui.TextBox(self._screen, self._width * 9 / 10, self._height / 10)
+        self._speedTextBox = ui.TextBox(self._screen, self._width / 10, self._height / 10)
 
         self._Run()
 
@@ -55,6 +60,7 @@ class RhythmGame:
         for i in range(0, self._laneCnt):
             self._DrawNotes(i)
         self._DrawFrame()
+        self._PrintText()
 
         pygame.display.flip()
 
@@ -85,12 +91,12 @@ class RhythmGame:
 
         # 노트 높이 위치
         currentTick = pygame.time.get_ticks()
-        currentSec = (currentTick - self._gameStartTick) / 1000
+        self._currentSec = (currentTick - self._gameStartTick) / 1000
         dropSec = DropSecs[self._dropSecIdx]
 
-        drawableNotes = self._sheet.ExtractDrawableNotes(laneNum, currentSec, dropSec)
+        drawableNotes = self._sheet.ExtractDrawableNotes(laneNum, self._currentSec, dropSec)
         for note in drawableNotes:
-            topY, height = self._CalcNotePosY(currentSec, note)
+            topY, height = self._CalcNotePosY(self._currentSec, note)
 
             # 각 노트 그리기
             pygame.draw.rect(self._screen, noteColor, (leftX, topY, width, height))
@@ -119,3 +125,11 @@ class RhythmGame:
         noteWidth = laneWidth - 2 * laneMargin
 
         return beginX + laneMargin, noteWidth
+
+    # 각종 텍스트 출력하기
+    def _PrintText(self):
+        speed = str(self._dropSecIdx + 1)
+        self._speedTextBox.Print("Speed: x" + speed, 20, True, "white")
+
+        currentSec = "{:.1f}".format(self._currentSec)
+        self._timeTextBox.Print(currentSec + "s", 20, False, "white")

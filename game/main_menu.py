@@ -86,7 +86,7 @@ class MainMenu:
 
     def _PrintTitle(self):
         color = self._TitleColors[self._lastTitleColorIdx]
-        self._titleBox.Print("예찬쌤의 리듬 게임", 100, color)
+        self._titleBox.Print("예찬쌤의 리듬 게임", 100, True, color)
 
     # 버튼 추가
     def _CreateButton(self, x, y, text, clickFunc):

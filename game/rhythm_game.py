@@ -45,8 +45,12 @@ class RhythmGame:
                 if event.type != pygame.KEYDOWN:
                     continue
 
-                if event.key == pygame.K_ESCAPE:
+                if event.key == pygame.K_ESCAPE:  # esc 키 누름
                     self._finishGame = True
+                elif event.key == pygame.K_EQUALS:  # + 키 누름
+                    self._dropSecIdx = min(self._dropSecIdx + 1, DropSecs.__len__() - 1)
+                elif event.key == pygame.K_MINUS:  # - 키 누름
+                    self._dropSecIdx = max(self._dropSecIdx - 1, 0)
 
             if self._finishGame:
                 return  # 게임 끝남

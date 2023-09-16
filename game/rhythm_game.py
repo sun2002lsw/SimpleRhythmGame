@@ -24,6 +24,7 @@ class RhythmGame:
         self._currentSec = 0
         self._dropSecIdx = 4
         self._finishGame = False
+        self._lanePressing = dict()
         self._gameStartTick = pygame.time.get_ticks()
         self._sheet = music.SheetMaker().MakeSheet()
         self._laneCnt = self._sheet.GetLaneCnt()
@@ -36,37 +37,62 @@ class RhythmGame:
     # 본격적인 게임 시작
     def _Run(self):
         while True:
+            self._screen.fill((0, 0, 0))  # 일단 이전 것들 전부 지우고 시작
+
+            dropSec = DropSecs[self._dropSecIdx]
+            self._visibleNotes = self._sheet.ExtractVisibleNotes(self._currentSec, dropSec)
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
 
-                # 마우스 입력 무시
-                if event.type != pygame.KEYDOWN:
-                    continue
-
-                if event.key == pygame.K_ESCAPE:  # esc 키 누름
-                    self._finishGame = True
-                elif event.key == pygame.K_EQUALS:  # + 키 누름
-                    self._dropSecIdx = min(self._dropSecIdx + 1, DropSecs.__len__() - 1)
-                elif event.key == pygame.K_MINUS:  # - 키 누름
-                    self._dropSecIdx = max(self._dropSecIdx - 1, 0)
+                # 키보드 입력만 처리
+                if event.type == pygame.KEYDOWN:
+                    self._HandleKeyDown(event.key)
+                elif event.type == pygame.KEYUP:
+                    self._HandleKeyUp(event.key)
 
             if self._finishGame:
                 return  # 게임 끝남
 
             self._DrawGame()
 
+            pygame.display.flip()  # 위에서 이뤄진 변화들을 한번에 출력
+
+    # 키 입력 처리
+    def _HandleKeyDown(self, key):
+        if key == pygame.K_ESCAPE:  # esc 키 누름
+            self._finishGame = True
+        elif key == pygame.K_EQUALS:  # + 키 누름
+            self._dropSecIdx = min(self._dropSecIdx + 1, DropSecs.__len__() - 1)
+        elif key == pygame.K_MINUS:  # - 키 누름
+            self._dropSecIdx = max(self._dropSecIdx - 1, 0)
+        elif pygame.K_0 <= key <= pygame.K_9:
+            laneNum = key - pygame.K_0
+            self._HandleKeyboardDown(laneNum)
+
+    def _HandleKeyUp(self, key):
+        if pygame.K_0 <= key <= pygame.K_9:
+            laneNum = key - pygame.K_0
+            self._HandleKeyboardUp(laneNum)
+
+    # 건반을 누른 것에 대한 처리
+    def _HandleKeyboardDown(self, laneNum):
+        self._lanePressing[laneNum] = True
+
+    # 건반을 뗀 것에 대한 처리
+    def _HandleKeyboardUp(self, laneNum):
+        self._lanePressing[laneNum] = False
+
     # 게임 화면 출력
     def _DrawGame(self):
-        self._screen.fill((0, 0, 0))
-
         for i in range(0, self._laneCnt):
             self._DrawNotes(i)
+            self._DrawKeyboardInput(i)
+
         self._DrawFrame()
         self._PrintText()
-
-        pygame.display.flip()
 
     # 게임 틀 그리기
     def _DrawFrame(self):
@@ -91,15 +117,13 @@ class RhythmGame:
         noteColor = NoteColors[noteColorIdx]
 
         # 노트 너비 위치
-        leftX, width = self._CalcNotePosX(laneNum)
+        leftX, width = self._CalcLanePosX(laneNum, 0.3)
 
         # 노트 높이 위치
         currentTick = pygame.time.get_ticks()
         self._currentSec = (currentTick - self._gameStartTick) / 1000
-        dropSec = DropSecs[self._dropSecIdx]
 
-        drawableNotes = self._sheet.ExtractDrawableNotes(laneNum, self._currentSec, dropSec)
-        for note in drawableNotes:
+        for note in self._visibleNotes[laneNum]:
             topY, height = self._CalcNotePosY(self._currentSec, note)
 
             # 각 노트 그리기
@@ -120,15 +144,18 @@ class RhythmGame:
         return endY, beginY - endY  # endY가 위에 있음
 
     # 해당 노트 lane 번호에 맞는 x 위치 찾기
-    def _CalcNotePosX(self, laneNum):
+    def _CalcLanePosX(self, laneNum, marginRatio):
         x = self._width / 3
         laneWidth = x / self._laneCnt
         beginX = x + laneNum * laneWidth
 
-        laneMargin = laneWidth / 8
-        noteWidth = laneWidth - 2 * laneMargin
+        leftMargin = laneWidth * (marginRatio / 2)
+        width = laneWidth - 2 * leftMargin
 
-        return beginX + laneMargin, noteWidth
+        # 선 굵기 때문에 width 살짝 부족하다;;
+        width += laneWidth / 30
+
+        return beginX + leftMargin, width
 
     # 각종 텍스트 출력하기
     def _PrintText(self):
@@ -137,3 +164,21 @@ class RhythmGame:
 
         currentSec = "{:.1f}".format(self._currentSec)
         self._timeTextBox.Print(currentSec + "s", 20, False, "white")
+
+    # 건반을 누른 것에 대한 표현
+    def _DrawKeyboardInput(self, laneNum):
+        if laneNum not in self._lanePressing:
+            return
+        if not self._lanePressing[laneNum]:
+            return
+
+        y = self._height
+        hitLineY = (HitLinePos / 100) * y
+        effectHalfLen = y - hitLineY
+        height = 2 * effectHalfLen
+
+        effectStartX, width = self._CalcLanePosX(laneNum, 0.15)
+
+        effectColor = (128, 128, 128)
+
+        pygame.draw.rect(self._screen, effectColor, (effectStartX, hitLineY, width, height))

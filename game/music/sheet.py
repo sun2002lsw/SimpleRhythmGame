@@ -12,18 +12,21 @@ class Sheet:
 
         self._laneSheet[laneNum].append(note)
 
-    # 각 라인별로 화면에 표시할 노트를 추출
-    def ExtractDrawableNotes(self, laneNum, currentSec, dropSec):
-        self._deleteOldNotes(laneNum, currentSec, dropSec)
+    # 각 라인별로 화면에 표시할 만큼 가까운 노트를 추출
+    def ExtractVisibleNotes(self, currentSec, dropSec):
+        self._deleteOldNotes(currentSec, dropSec)
 
-        notes = self._laneSheet[laneNum]
+        closeNotes = dict()
         inScreenSec = currentSec + dropSec
 
-        return [note for note in notes if note.BeginSec < inScreenSec]
+        for laneNum, notes in self._laneSheet.items():
+            closeNotes[laneNum] = [note for note in notes if note.BeginSec < inScreenSec]
+
+        return closeNotes
 
     # 이미 지나쳐간 오래된 노트들 삭제
-    def _deleteOldNotes(self, laneNum, currentSec, dropSec):
-        notes = self._laneSheet[laneNum]
+    def _deleteOldNotes(self, currentSec, dropSec):
         outScreenSec = currentSec - dropSec / 2
 
-        self._laneSheet[laneNum] = [note for note in notes if note.EndSec > outScreenSec]
+        for laneNum, notes in self._laneSheet.items():
+            self._laneSheet[laneNum] = [note for note in notes if note.EndSec > outScreenSec]

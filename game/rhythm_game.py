@@ -7,7 +7,7 @@ from .manager import LaneManager
 
 DropSecs = [5, 3, 2, 1.5, 1, 0.5, 0.3, 0.1]
 NoteColors = [(255, 255, 0), (0, 255, 0), (0, 0, 255)]
-HitLinePos = 80  # 1 ~ 99 중에 선택
+HitLinePos = 90  # 1 ~ 99 중에 선택
 
 
 class RhythmGame:
@@ -64,6 +64,8 @@ class RhythmGame:
 
             for laneManager in self._laneManagers.values():
                 laneManager.CheckMiss(self._currentSec)
+                laneManager.ProcessMelting(self._currentSec)
+                laneManager.GetComboState()
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -75,9 +77,6 @@ class RhythmGame:
                     self._HandleKeyDown(event.key)
                 elif event.type == pygame.KEYUP:
                     self._HandleKeyUp(event.key)
-
-            for laneManager in self._laneManagers.values():
-                laneManager.ProcessMelting(self._currentSec)
 
             self._DrawGame()
             if self._finishGame:

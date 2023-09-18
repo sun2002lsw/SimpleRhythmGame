@@ -1,4 +1,4 @@
-from .effectManager import *
+from .effect_manager import *
 from ..music.note import NoteState
 
 
@@ -137,22 +137,18 @@ class LaneManager:
 
     # 키를 눌렀을 때 효과 그리기
     def _DrawInput(self):
-        if self._isPressing:
-            for i in range(0, 200):
-                color = (i, i, i)
-                y = self._laneBottomY - i
-                startPos = (self._noteLeftX, y)
-                endPos = (self._noteLeftX + self._noteWidth - 1, y)
+        if not self._isPressing:
+            return
+        
+        for i in range(0, 200):
+            rgb = int(255 - 1.25 * i)
+            color = (rgb, rgb, rgb)
 
-                pygame.draw.line(self._screen, color, startPos, endPos)
+            y = self._laneBottomY - i
+            startPos = (self._noteLeftX, y)
+            endPos = (self._noteLeftX + self._noteWidth - 1, y)
 
-            for i in range(0, 200):
-                color = (200 - i, 200 - i, 200 - i)
-                y = self._laneBottomY - 200 - i
-                startPos = (self._noteLeftX, y)
-                endPos = (self._noteLeftX + self._noteWidth - 1, y)
-
-                pygame.draw.line(self._screen, color, startPos, endPos)
+            pygame.draw.line(self._screen, color, startPos, endPos)
 
     # 각 노트들 그리기
     def _DrawNotes(self, currentSecond):

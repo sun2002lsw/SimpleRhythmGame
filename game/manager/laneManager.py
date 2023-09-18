@@ -40,28 +40,23 @@ class LaneManager:
                 if note.EndSec < currentSecond - 0.2:
                     self._notes[i].State = NoteState.Miss
                     self._effectManager.Start(EffectType.Miss)
-                    
-    # 놓치는 노트 확인
-    def CheckMiss(self, currentSecond):
-        for i, note in enumerate(self._notes):
-            if note.BeginSec > currentSecond:
-                break  # 여기 i 부터는 아직 확인할 필요 없는 노트
-
-            if note.State == NoteState.Drop:
-                if currentSecond - 0.2 < note.BeginSec < currentSecond:
-                    self._effectManager.Start(EffectType.Danger)
-                if note.BeginSec < currentSecond - 0.2:
-                    self._notes[i].State = NoteState.Miss
-                    self._effectManager.Start(EffectType.Miss)
-
-            if note.State == NoteState.Hit:
-                if note.EndSec < currentSecond - 0.2:
-                    self._notes[i].State = NoteState.Miss
-                    self._effectManager.Start(EffectType.Miss)
+                    self._effectManager.Stop(EffectType.Melting)
 
     # 노트 hit 해서 쭉 녹이는 과정 진행
-    def ProcessMelting(self, noteDropSec):
-        self._noteDropSec = noteDropSec
+    def ProcessMelting(self, currentSecond):
+        if not self._isPressing:
+            return
+
+        hitNote = None
+        for i, note in enumerate(self._notes):
+            if note.State == NoteState.Hit:
+                hitNote = note
+                break
+        if hitNote is None:
+            return
+
+        hitNote.BeginSec = currentSecond
+        self._effectManager.Start(EffectType.Melting)
 
     # 타이밍 맞춰서 키 누름
     def HandleKeyDown(self, currentSecond):
@@ -80,7 +75,7 @@ class LaneManager:
             return  # 아직 노트 도착까지 한참 남음
 
         if currentSecond - 0.2 < firstDropNote.BeginSec < currentSecond + 0.2:
-            firstDropNote.State = NoteState.Hit
+            firstDropNote.State = NoteState.Hit  # 타이밍 맞게 맞췄다
             if currentSecond - 0.1 < firstDropNote.BeginSec < currentSecond + 0.1:
                 self._effectManager.Start(EffectType.PerfectHit)
             else:
@@ -92,6 +87,32 @@ class LaneManager:
     # 타이밍 맞춰서 키 뗌
     def HandleKeyUp(self, currentSecond):
         self._isPressing = False
+
+        hitNote = None
+        hitNoteIdx = None
+        for i, note in enumerate(self._notes):
+            if note.State == NoteState.Hit:
+                hitNote = note
+                hitNoteIdx = i
+                break
+        if hitNote is None:
+            return
+
+        self._effectManager.Stop(EffectType.Melting)
+
+        if currentSecond - 0.2 < hitNote.EndSec < currentSecond + 0.2:
+            self._notes.pop(hitNoteIdx)  # 노트 하나를 성공적으로 녹여버림
+            if currentSecond - 0.1 < hitNote.EndSec < currentSecond + 0.1:
+                self._effectManager.Start(EffectType.PerfectHit)
+            else:
+                self._effectManager.Start(EffectType.GoodHit)
+        else:  # 너무 빨리 뗐다
+            hitNote.State = NoteState.Miss
+            self._effectManager.Start(EffectType.Miss)
+
+    # 노트 떨어지는 속도 변경
+    def SetNoteDropSec(self, noteDropSec):
+        self._noteDropSec = noteDropSec
 
     # 해당 라인의 상황 그리기
     def Draw(self, currentSecond):

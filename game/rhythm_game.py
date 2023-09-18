@@ -76,6 +76,9 @@ class RhythmGame:
                 elif event.type == pygame.KEYUP:
                     self._HandleKeyUp(event.key)
 
+            for laneManager in self._laneManagers.values():
+                laneManager.ProcessMelting(self._currentSec)
+
             self._DrawGame()
             if self._finishGame:
                 return

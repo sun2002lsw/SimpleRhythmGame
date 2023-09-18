@@ -5,10 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="68e6348c-de41-4f95-a867-efa448a7c93b" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/game/Effect/good_hit_effect.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game/Effect/perfect_hit_effect.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/game/Effect/melting_effect.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game/Effect/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/game/Effect/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/Effect/danger_effect.py" beforeDir="false" afterPath="$PROJECT_DIR$/game/Effect/danger_effect.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game/Effect/effect.py" beforeDir="false" afterPath="$PROJECT_DIR$/game/Effect/effect.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game/manager/effectManager.py" beforeDir="false" afterPath="$PROJECT_DIR$/game/manager/effectManager.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game/manager/laneManager.py" beforeDir="false" afterPath="$PROJECT_DIR$/game/manager/laneManager.py" afterDir="false" />

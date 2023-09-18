@@ -20,10 +20,13 @@ class Effect:
         self._hitLineY = hitLineY
         self._startTick = 0
 
-    def Start(self):
+    def StartOnce(self):
         if self._startTick > 0:
             return  # 이미 시작함
 
+        self._startTick = pygame.time.get_ticks()
+
+    def Start(self):
         self._startTick = pygame.time.get_ticks()
 
     def Stop(self):

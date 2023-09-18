@@ -31,15 +31,15 @@ class LaneManager:
 
             if note.State == NoteState.Drop:
                 if currentSecond - 0.2 < note.BeginSec < currentSecond:
-                    self._effectManager.Start(EffectType.Danger)
+                    self._effectManager.StartOnce(EffectType.Danger)
                 if note.BeginSec < currentSecond - 0.2:
                     self._notes[i].State = NoteState.Miss
-                    self._effectManager.Start(EffectType.Miss)
+                    self._effectManager.StartOnce(EffectType.Miss)
 
             if note.State == NoteState.Hit:
                 if note.EndSec < currentSecond - 0.2:
                     self._notes[i].State = NoteState.Miss
-                    self._effectManager.Start(EffectType.Miss)
+                    self._effectManager.StartOnce(EffectType.Miss)
                     self._effectManager.Stop(EffectType.Melting)
 
     # 노트 hit 해서 쭉 녹이는 과정 진행
@@ -56,7 +56,7 @@ class LaneManager:
             return
 
         hitNote.BeginSec = currentSecond
-        self._effectManager.Start(EffectType.Melting)
+        self._effectManager.StartOnce(EffectType.Melting)
 
     # 타이밍 맞춰서 키 누름
     def HandleKeyDown(self, currentSecond):

@@ -11,6 +11,9 @@ class EffectManager:
         self._effect[EffectType.PerfectHit] = PerfectHitEffect(screen, laneLeftX, laneWidth, hitLineY)
         self._effect[EffectType.Melting] = MeltingEffect(screen, laneLeftX, laneWidth, hitLineY)
 
+    def StartOnce(self, effectType):
+        self._effect[effectType].StartOnce()
+
     def Start(self, effectType):
         self._effect[effectType].Start()
 

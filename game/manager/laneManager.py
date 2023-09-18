@@ -13,6 +13,8 @@ class LaneManager:
         self._noteColor = noteColor
         self._noteDropSec = noteDropSec
         self._isPressing = False
+        self._comboState = 0  # 콤보 0: 변화 없음, 1: Hit, -1: Miss
+        self._lastMeltingComboSec = 0
 
         # 펑펑 화려한 이펙트 관리자
         self._effectManager = EffectManager(screen, laneLeftX, laneWidth, hitLineY)
@@ -25,7 +27,7 @@ class LaneManager:
 
     # 놓치는 노트 확인
     def CheckMiss(self, currentSecond):
-        for i, note in enumerate(self._notes):
+        for note in self._notes:
             if note.BeginSec > currentSecond:
                 break  # 여기 i 부터는 아직 확인할 필요 없는 노트
 
@@ -33,14 +35,18 @@ class LaneManager:
                 if currentSecond - 0.2 < note.BeginSec < currentSecond:
                     self._effectManager.StartOnce(EffectType.Danger)
                 if note.BeginSec < currentSecond - 0.2:
-                    self._notes[i].State = NoteState.Miss
-                    self._effectManager.StartOnce(EffectType.Miss)
+                    self._SetNoteMiss(note)
 
             if note.State == NoteState.Hit:
                 if note.EndSec < currentSecond - 0.2:
-                    self._notes[i].State = NoteState.Miss
-                    self._effectManager.StartOnce(EffectType.Miss)
+                    self._SetNoteMiss(note)
                     self._effectManager.Stop(EffectType.Melting)
+
+    def _SetNoteMiss(self, note):
+        note.State = NoteState.Miss
+
+        self._comboState = -1
+        self._effectManager.Start(EffectType.Miss)
 
     # 노트 hit 해서 쭉 녹이는 과정 진행
     def ProcessMelting(self, currentSecond):
@@ -48,7 +54,7 @@ class LaneManager:
             return
 
         hitNote = None
-        for i, note in enumerate(self._notes):
+        for note in self._notes:
             if note.State == NoteState.Hit:
                 hitNote = note
                 break
@@ -57,6 +63,9 @@ class LaneManager:
 
         hitNote.BeginSec = currentSecond
         self._effectManager.StartOnce(EffectType.Melting)
+        if self._lastMeltingComboSec + 0.1 < currentSecond:
+            self._lastMeltingComboSec = currentSecond
+            self._comboState = 1
 
     # 타이밍 맞춰서 키 누름
     def HandleKeyDown(self, currentSecond):
@@ -64,7 +73,7 @@ class LaneManager:
 
         # 놓치지 않은 가장 가까운 노트
         firstDropNote = None
-        for i, note in enumerate(self._notes):
+        for note in self._notes:
             if note.State == NoteState.Drop:
                 firstDropNote = note
                 break
@@ -76,13 +85,13 @@ class LaneManager:
 
         if currentSecond - 0.2 < firstDropNote.BeginSec < currentSecond + 0.2:
             firstDropNote.State = NoteState.Hit  # 타이밍 맞게 맞췄다
+            self._comboState = 1
             if currentSecond - 0.1 < firstDropNote.BeginSec < currentSecond + 0.1:
                 self._effectManager.Start(EffectType.PerfectHit)
             else:
                 self._effectManager.Start(EffectType.GoodHit)
         else:  # 너무 빨리 눌렀다
-            firstDropNote.State = NoteState.Miss
-            self._effectManager.Start(EffectType.Miss)
+            self._SetNoteMiss(firstDropNote)
 
     # 타이밍 맞춰서 키 뗌
     def HandleKeyUp(self, currentSecond):
@@ -102,17 +111,23 @@ class LaneManager:
 
         if currentSecond - 0.2 < hitNote.EndSec < currentSecond + 0.2:
             self._notes.pop(hitNoteIdx)  # 노트 하나를 성공적으로 녹여버림
+            self._comboState = 1
             if currentSecond - 0.1 < hitNote.EndSec < currentSecond + 0.1:
                 self._effectManager.Start(EffectType.PerfectHit)
             else:
                 self._effectManager.Start(EffectType.GoodHit)
         else:  # 너무 빨리 뗐다
-            hitNote.State = NoteState.Miss
-            self._effectManager.Start(EffectType.Miss)
+            self._SetNoteMiss(hitNote)
 
     # 노트 떨어지는 속도 변경
     def SetNoteDropSec(self, noteDropSec):
         self._noteDropSec = noteDropSec
+
+    # 현재의 콤보 상태 확인
+    def GetComboState(self):
+        comboState = self._comboState
+        self._comboState = 0
+        return comboState
 
     # 해당 라인의 상황 그리기
     def Draw(self, currentSecond):

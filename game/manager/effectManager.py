@@ -1,4 +1,4 @@
-from ..Effect import *
+from ..effect import *
 
 
 class EffectManager:

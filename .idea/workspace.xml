@@ -5,8 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="68e6348c-de41-4f95-a867-efa448a7c93b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/game/Effect/effect.py" beforeDir="false" afterPath="$PROJECT_DIR$/game/Effect/effect.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/Effect/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/game/effect/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/Effect/danger_effect.py" beforeDir="false" afterPath="$PROJECT_DIR$/game/effect/danger_effect.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/Effect/effect.py" beforeDir="false" afterPath="$PROJECT_DIR$/game/effect/effect.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/Effect/good_hit_effect.py" beforeDir="false" afterPath="$PROJECT_DIR$/game/effect/good_hit_effect.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/Effect/melting_effect.py" beforeDir="false" afterPath="$PROJECT_DIR$/game/effect/melting_effect.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/Effect/miss_effect.py" beforeDir="false" afterPath="$PROJECT_DIR$/game/effect/miss_effect.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/Effect/perfect_hit_effect.py" beforeDir="false" afterPath="$PROJECT_DIR$/game/effect/perfect_hit_effect.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game/manager/effectManager.py" beforeDir="false" afterPath="$PROJECT_DIR$/game/manager/effectManager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/manager/laneManager.py" beforeDir="false" afterPath="$PROJECT_DIR$/game/manager/laneManager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,6 +91,18 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/game/manager/laneManager.py</url>
+          <line>113</line>
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/game/manager/laneManager.py</url>
+          <line>87</line>
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
+      </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
           <properties notifyOnTerminate="true" exception="BaseException">

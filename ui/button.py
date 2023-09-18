@@ -64,8 +64,6 @@ class Button:
         pygame.draw.rect(self._screen, backgroundColor, self._buttonRect)
         self._screen.blit(surface, textRect)
 
-        pygame.display.update(self._buttonRect)
-
     # x, y 좌표가 버튼에 들어왔는지 확인
     def _IsInsideButton(self, mousePos):
         x = mousePos[0]

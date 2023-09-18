@@ -7,7 +7,7 @@ from .manager import LaneManager
 
 DropSecs = [5, 3, 2, 1.5, 1, 0.5, 0.3, 0.1]
 NoteColors = [(255, 255, 0), (0, 255, 0), (0, 0, 255)]
-HitLinePos = 50  # 1 ~ 99 중에 선택
+HitLinePos = 80  # 1 ~ 99 중에 선택
 
 
 class RhythmGame:
@@ -51,13 +51,19 @@ class RhythmGame:
             noteColorIdx = laneNum % NoteColors.__len__()
             noteColor = NoteColors[noteColorIdx]
 
-            mgr = LaneManager(self._screen, laneLeftX, laneWidth, self._hitLineY, notes, noteColor, noteDropSec)
+            mgr = LaneManager(self._screen,
+                              laneLeftX, laneWidth, self._screenHeight, self._hitLineY,
+                              notes, noteColor, noteDropSec)
+
             self._laneManagers[laneNum] = mgr
 
     # 본격적인 게임 시작
     def _Run(self):
         while True:
             self._currentSec = (pygame.time.get_ticks() - self._gameStartTick) / 1000
+
+            for laneManager in self._laneManagers.values():
+                laneManager.CheckMiss(self._currentSec)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -119,6 +125,7 @@ class RhythmGame:
         y = self._screenHeight
 
         # 노트 라인 구분선
+        """
         laneWidth = x / self._laneCnt
         for i in range(1, self._laneCnt):
             laneX = x + i * laneWidth
@@ -126,6 +133,7 @@ class RhythmGame:
             endPos = (laneX, y)
 
             pygame.draw.line(self._screen, "white", startPos, endPos, 1)
+        """
 
         # 히트 라인
         startPos = (x, self._hitLineY)
@@ -139,7 +147,7 @@ class RhythmGame:
     # 각종 텍스트 출력하기
     def _PrintText(self):
         speed = str(self._dropSecIdx + 1)
-        self._speedTextBox.Print("Speed: x" + speed, 20, True, "white")
+        self._speedTextBox.Print("Speed: x" + speed, 20, True, "white", 255)
 
         currentSec = "{:.1f}".format(self._currentSec)
-        self._timeTextBox.Print(currentSec + "s", 20, False, "white")
+        self._timeTextBox.Print(currentSec + "s", 20, False, "white", 255)

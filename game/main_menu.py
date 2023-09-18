@@ -1,9 +1,8 @@
-import pygame
-import sys
+import pygame.display
 
 import etc
 import ui
-from . import RhythmGame
+from .rhythm_game import *
 
 
 class MainMenu:
@@ -61,6 +60,8 @@ class MainMenu:
             # 타이틀은 계속 깜빡 깜빡
             self._ChangeTitleColor()
 
+            pygame.display.flip()
+
     def _CreateTitle(self):
         x = self._width / 2
         y = self._height / 4
@@ -86,7 +87,7 @@ class MainMenu:
 
     def _PrintTitle(self):
         color = self._TitleColors[self._lastTitleColorIdx]
-        self._titleBox.Print("예찬쌤의 리듬 게임", 100, True, color)
+        self._titleBox.Print("예찬쌤의 리듬 게임", 100, True, color, 255)
 
     # 버튼 추가
     def _CreateButton(self, x, y, text, clickFunc):

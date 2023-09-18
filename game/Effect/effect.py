@@ -26,6 +26,9 @@ class Effect:
 
         self._startTick = pygame.time.get_ticks()
 
+    def Stop(self):
+        self._startTick = 0
+
     def Draw(self):
         if self._startTick == 0:
             return  # 그릴게 없음
@@ -36,14 +39,14 @@ class Effect:
 
     # hitLine 위에서 팝업되는 글자 효가
     def _DrawPopupText(self, effectSec, text, color):
-        if effectSec >= 2:
+        if effectSec >= 1:
             return True
 
         x = self._laneLeftX + self._laneWidth / 2
         y = self._hitLineY - 20 - 50 * effectSec
 
         textBox = TextBox(self._screen, x, y)
-        alpha = 255 - int(effectSec * 120)
+        alpha = 255 - int(effectSec * 250)
 
         textBox.Print(text, 30, True, color, alpha)
 

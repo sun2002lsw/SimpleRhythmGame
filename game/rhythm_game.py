@@ -93,13 +93,13 @@ class RhythmGame:
         elif pygame.K_0 <= key <= pygame.K_9:
             laneNum = key - pygame.K_0
             if laneNum in self._laneManagers:
-                self._laneManagers[laneNum].HandleKeyDown()
+                self._laneManagers[laneNum].HandleKeyDown(self._currentSec)
 
     def _HandleKeyUp(self, key):
         if pygame.K_0 <= key <= pygame.K_9:
             laneNum = key - pygame.K_0
             if laneNum in self._laneManagers:
-                self._laneManagers[laneNum].HandleKeyUp()
+                self._laneManagers[laneNum].HandleKeyUp(self._currentSec)
 
     def _ChangeNoteDropSec(self):
         noteDropSec = DropSecs[self._dropSecIdx]

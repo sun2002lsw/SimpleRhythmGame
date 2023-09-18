@@ -7,6 +7,8 @@ class EffectManager:
 
         self._effect[EffectType.Danger] = DangerEffect(screen, laneLeftX, laneWidth, hitLineY)
         self._effect[EffectType.Miss] = MissEffect(screen, laneLeftX, laneWidth, hitLineY)
+        self._effect[EffectType.GoodHit] = GoodHitEffect(screen, laneLeftX, laneWidth, hitLineY)
+        self._effect[EffectType.PerfectHit] = PerfectHitEffect(screen, laneLeftX, laneWidth, hitLineY)
 
     def Start(self, effectType):
         self._effect[effectType].Start()

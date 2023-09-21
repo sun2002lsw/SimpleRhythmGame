@@ -1,5 +1,4 @@
 from .effect import Effect
-from ui import TextBox
 
 
 class PerfectHitEffect(Effect):

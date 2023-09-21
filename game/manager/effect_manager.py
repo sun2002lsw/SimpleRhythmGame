@@ -1,4 +1,4 @@
-from ..effect import *
+from ..lane_effect import *
 
 
 class EffectManager:

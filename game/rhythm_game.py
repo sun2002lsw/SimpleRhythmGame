@@ -4,6 +4,7 @@ import sys
 from ui import TextBox
 from .music import Sheet
 from .manager import LaneManager
+from .manager import ScoreManager
 
 DropSecs = [5, 3, 2, 1.5, 1, 0.5, 0.3, 0.1]
 NoteColors = [(255, 255, 0), (0, 255, 0), (0, 0, 255)]
@@ -30,6 +31,7 @@ class RhythmGame:
 
         self._timeTextBox = TextBox(self._screen, self._screenWidth * 9 / 10, self._screenHeight / 10)
         self._speedTextBox = TextBox(self._screen, self._screenWidth / 10, self._screenHeight / 10)
+        self._scoreManager = ScoreManager(self._screen, self._screenWidth, self._screenHeight)
 
         self._laneNotes = Sheet().GetLaneNotes()
         self._laneCnt = len(self._laneNotes)
@@ -65,7 +67,8 @@ class RhythmGame:
             for laneManager in self._laneManagers.values():
                 laneManager.CheckMiss(self._currentSec)
                 laneManager.ProcessMelting(self._currentSec)
-                laneManager.GetComboState()
+                comboState = laneManager.GetComboState()
+                self._scoreManager.AddComboState(comboState)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -118,6 +121,7 @@ class RhythmGame:
 
         self._DrawFrame()
         self._PrintText()
+        self._scoreManager.Draw()
 
         pygame.display.flip()
 

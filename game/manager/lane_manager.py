@@ -1,5 +1,6 @@
 from .effect_manager import *
 from ..music.note import NoteState
+from .score_manager import ComboState
 
 
 class LaneManager:
@@ -13,7 +14,7 @@ class LaneManager:
         self._noteColor = noteColor
         self._noteDropSec = noteDropSec
         self._isPressing = False
-        self._comboState = 0  # 콤보 0: 변화 없음, 1: Hit, -1: Miss
+        self._comboState = ComboState.NoChange
         self._lastMeltingComboSec = 0
 
         # 펑펑 화려한 이펙트 관리자
@@ -45,7 +46,7 @@ class LaneManager:
     def _SetNoteMiss(self, note):
         note.State = NoteState.Miss
 
-        self._comboState = -1
+        self._comboState = ComboState.Miss
         self._effectManager.Start(EffectType.Miss)
 
     # 노트 hit 해서 쭉 녹이는 과정 진행
@@ -65,7 +66,7 @@ class LaneManager:
         self._effectManager.StartOnce(EffectType.Melting)
         if self._lastMeltingComboSec + 0.1 < currentSecond:
             self._lastMeltingComboSec = currentSecond
-            self._comboState = 1
+            self._comboState = ComboState.Hit
 
     # 타이밍 맞춰서 키 누름
     def HandleKeyDown(self, currentSecond):
@@ -85,7 +86,7 @@ class LaneManager:
 
         if currentSecond - 0.2 < firstDropNote.BeginSec < currentSecond + 0.2:
             firstDropNote.State = NoteState.Hit  # 타이밍 맞게 맞췄다
-            self._comboState = 1
+            self._comboState = ComboState.Hit
             if currentSecond - 0.1 < firstDropNote.BeginSec < currentSecond + 0.1:
                 self._effectManager.Start(EffectType.PerfectHit)
             else:
@@ -111,7 +112,7 @@ class LaneManager:
 
         if currentSecond - 0.2 < hitNote.EndSec < currentSecond + 0.2:
             self._notes.pop(hitNoteIdx)  # 노트 하나를 성공적으로 녹여버림
-            self._comboState = 1
+            self._comboState = ComboState.Hit
             if currentSecond - 0.1 < hitNote.EndSec < currentSecond + 0.1:
                 self._effectManager.Start(EffectType.PerfectHit)
             else:
@@ -126,7 +127,7 @@ class LaneManager:
     # 현재의 콤보 상태 확인
     def GetComboState(self):
         comboState = self._comboState
-        self._comboState = 0
+        self._comboState = ComboState.NoChange
         return comboState
 
     # 해당 라인의 상황 그리기
@@ -139,14 +140,14 @@ class LaneManager:
     def _DrawInput(self):
         if not self._isPressing:
             return
-        
+
         for i in range(0, 200):
             rgb = int(255 - 1.25 * i)
             color = (rgb, rgb, rgb)
 
             y = self._laneBottomY - i
             startPos = (self._noteLeftX, y)
-            endPos = (self._noteLeftX + self._noteWidth - 1, y)
+            endPos = (self._noteLeftX + self._noteWidth - 2, y)
 
             pygame.draw.line(self._screen, color, startPos, endPos)
 

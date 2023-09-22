@@ -113,6 +113,7 @@ class LaneManager:
         if currentSecond - 0.2 < hitNote.EndSec < currentSecond + 0.2:
             self._notes.pop(hitNoteIdx)  # 노트 하나를 성공적으로 녹여버림
             self._comboState = ComboState.Hit
+            self._effectManager.Start(EffectType.Explosion)
             if currentSecond - 0.1 < hitNote.EndSec < currentSecond + 0.1:
                 self._effectManager.Start(EffectType.PerfectHit)
             else:
@@ -139,6 +140,15 @@ class LaneManager:
     # 키를 눌렀을 때 효과 그리기
     def _DrawInput(self):
         if not self._isPressing:
+            return
+        
+        # 히트 중에는 출력 안 함
+        hitNote = None
+        for note in self._notes:
+            if note.State == NoteState.Hit:
+                hitNote = note
+                break
+        if hitNote is not None:
             return
 
         for i in range(0, 200):

@@ -12,8 +12,9 @@ HitLinePos = 90  # 1 ~ 99 중에 선택
 
 
 class RhythmGame:
-    def __init__(self, screen):
+    def __init__(self, screen, instrument):
         self._screen = screen
+        self._instrument = instrument
 
         width, height = pygame.display.get_surface().get_size()
         self._screenWidth = width
@@ -34,7 +35,7 @@ class RhythmGame:
         self._scoreManager = ScoreManager(self._screen, self._screenWidth, self._screenHeight)
 
         self._laneNotes = Sheet().GetLaneNotes()
-        self._laneCnt = len(self._laneNotes)
+        self._laneCnt = self._instrument.GetLaneCnt()
         self._InitLaneManager()
 
         self._gameStartTick = pygame.time.get_ticks()

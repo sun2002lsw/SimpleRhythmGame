@@ -1,2 +1,3 @@
-from .note import NoteState
-from .sheet import Sheet
+from .note import *
+from .sheet import *
+from .instrument import *

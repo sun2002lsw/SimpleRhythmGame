@@ -3,6 +3,7 @@ import pygame.display
 import etc
 import ui
 from .rhythm_game import *
+from .manager.instrument_manager import *
 
 
 class MainMenu:
@@ -15,6 +16,9 @@ class MainMenu:
         width, height = pygame.display.get_surface().get_size()
         self._width = width
         self._height = height
+
+        # 필수 준비물 (악기, 악보)
+        self._instrumentManager = InstrumentManager()
 
         # 게임 한판 끝나면, 다시 메뉴로 돌아오면서 다시 시작
         while True:
@@ -114,4 +118,4 @@ class MainMenu:
 
     # 리듬 게임 시작
     def _StartRhythmGame(self):
-        RhythmGame(self._screen)
+        RhythmGame(self._screen, self._instrumentManager.GetInstrument("recorder"))

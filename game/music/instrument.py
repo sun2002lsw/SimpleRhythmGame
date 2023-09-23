@@ -1,3 +1,6 @@
+from pygame import mixer
+
+
 class Instrument:
     def __init__(self):
         self._laneSetByPitch = dict()
@@ -15,7 +18,8 @@ class Instrument:
         self._SetLaneCnt()
 
     def SetPitchSound(self, pitch, soundPath):
-        self._soundByPitch[pitch] = soundPath
+        sound = mixer.Sound(soundPath)
+        self._soundByPitch[pitch] = sound
 
     def _SetLaneCnt(self):
         maxLane = 0
@@ -33,3 +37,10 @@ class Instrument:
 
     def GetLaneSetByPitch(self, pitch):
         return self._laneSetByPitch[pitch]
+
+    def PlayPitchSound(self, pitch):
+        if pitch not in self._soundByPitch:
+            return
+
+        sound = self._soundByPitch[pitch]
+        mixer.Sound.play(sound)

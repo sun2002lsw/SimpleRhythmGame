@@ -162,3 +162,6 @@ class RhythmGame:
 
         pitch = self._sheet.GetPitchByCurrentSec(self._currentSec)
         self._pitchTextBox.Print(pitch, 75, True, "yellow", 255)
+
+        startPitch = self._sheet.GetStartPitchByCurrentSec(self._currentSec)
+        self._instrument.PlayPitchSound(startPitch)

@@ -5,7 +5,7 @@ from .lane_note import LaneNote
 
 EPSILON = 0.0000000000001
 START_COUNT_DOWN_TIME = 1  # 시작할 때 준비 시간 카운트
-BEAT_GAP = 1/4  # 박자랑 박자 사이에 쉬는 시간을 몇 박자로 할 것인가
+BEAT_GAP = 1/10  # 박자랑 박자 사이에 쉬는 시간을 몇 박자로 할 것인가
 
 
 class Sheet:

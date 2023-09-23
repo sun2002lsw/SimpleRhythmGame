@@ -120,4 +120,4 @@ class MainMenu:
     def _StartRhythmGame(self):
         instrument = self._instrumentManager.GetInstrument("recorder")
         sheet = self._instrumentManager.GetSheet("champion")
-        RhythmGame(self._screen, instrument, sheet, True)
+        RhythmGame(self._screen, instrument, sheet, False)

@@ -7,6 +7,11 @@ class Instrument:
         self._pitchByLaneSet = dict()
         self._soundByPitch = dict()
         self._laneCnt = 0
+        self._pressingLanes = dict()
+
+    # 새롭게 게임 시작될 때 초기화
+    def Ready(self):
+        self._pressingLanes = dict()
 
     def SetPitchLane(self, jsonData):
         for pitch, lanes in jsonData.items():
@@ -32,15 +37,37 @@ class Instrument:
     def GetLaneCnt(self):
         return self._laneCnt
 
-    def GetPitchByLaneSet(self, laneSet):
-        return self._pitchByLaneSet[laneSet]
-
     def GetLaneSetByPitch(self, pitch):
         return self._laneSetByPitch[pitch]
 
+    # 키를 누름으로서 소리 재생
+    def PlayKeyDownSound(self, lane):
+        self._pressingLanes[lane] = True
+        self._PlaySoundByPressing()
+        
+    # 키를 뗌으로서 소리 재생
+    def PlayKeyUpSound(self, lane):
+        self._pressingLanes[lane] = False
+        self._PlaySoundByPressing()
+
+    def _PlaySoundByPressing(self):
+        pressingLanes = list()
+        for lane, isPressing in self._pressingLanes.items():
+            if isPressing:
+                pressingLanes.append(lane)
+
+        laneSet = frozenset(pressingLanes)
+        if laneSet not in self._pitchByLaneSet:
+            return
+
+        pitch = self._pitchByLaneSet[laneSet]
+        self.PlayPitchSound(pitch)
+
+    # 해당 pitch에 맞는 소리 재생
     def PlayPitchSound(self, pitch):
         if pitch not in self._soundByPitch:
             return
 
         sound = self._soundByPitch[pitch]
         mixer.Sound.play(sound)
+

@@ -11,7 +11,7 @@ BEAT_GAP = 1/10  # 박자랑 박자 사이에 쉬는 시간을 몇 박자로 할
 class Sheet:
     def __init__(self, sheetName, sheetData):
         self._sheet = list()
-        self._playedPitchBeginSec = list()
+        self._playedPitchBeginSec = dict()
 
         self._sheetName = sheetName
         self._ReadData(sheetData)
@@ -29,10 +29,12 @@ class Sheet:
 
             beginSec += duration + BEAT_GAP * oneBeatSec
 
+    # 새롭게 게임 시작될 때 초기화
+    def Ready(self):
+        self._playedPitchBeginSec = dict()
+
     # 해당 악기에 맞는 lane 노트 반환
     def GetLaneNotesForInstrument(self, instrument):
-        self._playedPitchBeginSec = dict()  # 딱히 초기화 해줄 곳이 없어서 끼워 팔기
-
         laneNotes = dict()
         for i in range(0, instrument.GetLaneCnt()):
             laneNotes[i] = list()

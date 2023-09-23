@@ -31,6 +31,9 @@ class RhythmGame:
         self._dropSecIdx = 4
         self._finishGame = False
 
+        self._instrument.Ready()
+        self._sheet.Ready()
+
         # 양 옆의 각종 정보 표시 공간
         self._timeTextBox = TextBox(self._screen, self._screenWidth * 9 / 10, self._screenHeight / 10)
         self._speedTextBox = TextBox(self._screen, self._screenWidth / 10, self._screenHeight / 10)
@@ -114,12 +117,14 @@ class RhythmGame:
             laneNum = key - pygame.K_0
             if laneNum in self._laneManagers:
                 self._laneManagers[laneNum].HandleKeyDown(self._currentSec)
+            self._instrument.PlayKeyDownSound(laneNum)
 
     def _HandleKeyUp(self, key):
         if pygame.K_0 <= key <= pygame.K_9:
             laneNum = key - pygame.K_0
             if laneNum in self._laneManagers:
                 self._laneManagers[laneNum].HandleKeyUp(self._currentSec)
+            self._instrument.PlayKeyUpSound(laneNum)
 
     def _ChangeNoteDropSec(self):
         noteDropSec = DropSecs[self._dropSecIdx]

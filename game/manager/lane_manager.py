@@ -1,5 +1,5 @@
 from .effect_manager import *
-from ..music.note import NoteState
+from ..music.lane_note import LaneNoteState
 from .score_manager import ComboState
 
 
@@ -32,19 +32,19 @@ class LaneManager:
             if note.BeginSec > currentSecond:
                 break  # 여기 i 부터는 아직 확인할 필요 없는 노트
 
-            if note.State == NoteState.Drop:
+            if note.State == LaneNoteState.Drop:
                 if currentSecond - 0.2 < note.BeginSec < currentSecond:
                     self._effectManager.StartOnce(EffectType.Danger)
                 if note.BeginSec < currentSecond - 0.2:
                     self._SetNoteMiss(note)
 
-            if note.State == NoteState.Hit:
+            if note.State == LaneNoteState.Hit:
                 if note.EndSec < currentSecond - 0.2:
                     self._SetNoteMiss(note)
                     self._effectManager.Stop(EffectType.Melting)
 
     def _SetNoteMiss(self, note):
-        note.State = NoteState.Miss
+        note.State = LaneNoteState.Miss
 
         self._comboState = ComboState.Miss
         self._effectManager.Start(EffectType.Miss)
@@ -56,7 +56,7 @@ class LaneManager:
 
         hitNote = None
         for note in self._notes:
-            if note.State == NoteState.Hit:
+            if note.State == LaneNoteState.Hit:
                 hitNote = note
                 break
         if hitNote is None:
@@ -75,7 +75,7 @@ class LaneManager:
         # 놓치지 않은 가장 가까운 노트
         firstDropNote = None
         for note in self._notes:
-            if note.State == NoteState.Drop:
+            if note.State == LaneNoteState.Drop:
                 firstDropNote = note
                 break
         if firstDropNote is None:
@@ -85,7 +85,7 @@ class LaneManager:
             return  # 아직 노트 도착까지 한참 남음
 
         if currentSecond - 0.2 < firstDropNote.BeginSec < currentSecond + 0.2:
-            firstDropNote.State = NoteState.Hit  # 타이밍 맞게 맞췄다
+            firstDropNote.State = LaneNoteState.Hit  # 타이밍 맞게 맞췄다
             self._comboState = ComboState.Hit
             if currentSecond - 0.1 < firstDropNote.BeginSec < currentSecond + 0.1:
                 self._effectManager.Start(EffectType.PerfectHit)
@@ -101,7 +101,7 @@ class LaneManager:
         hitNote = None
         hitNoteIdx = None
         for i, note in enumerate(self._notes):
-            if note.State == NoteState.Hit:
+            if note.State == LaneNoteState.Hit:
                 hitNote = note
                 hitNoteIdx = i
                 break
@@ -145,7 +145,7 @@ class LaneManager:
         # 히트 중에는 출력 안 함
         hitNote = None
         for note in self._notes:
-            if note.State == NoteState.Hit:
+            if note.State == LaneNoteState.Hit:
                 hitNote = note
                 break
         if hitNote is not None:

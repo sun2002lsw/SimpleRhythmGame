@@ -2,7 +2,6 @@ import pygame
 import sys
 
 from ui import TextBox
-from .music import Sheet
 from .manager import LaneManager
 from .manager import ScoreManager
 
@@ -12,9 +11,10 @@ HitLinePos = 90  # 1 ~ 99 중에 선택
 
 
 class RhythmGame:
-    def __init__(self, screen, instrument):
+    def __init__(self, screen, instrument, sheet):
         self._screen = screen
         self._instrument = instrument
+        self._sheet = sheet
 
         width, height = pygame.display.get_surface().get_size()
         self._screenWidth = width
@@ -34,7 +34,7 @@ class RhythmGame:
         self._speedTextBox = TextBox(self._screen, self._screenWidth / 10, self._screenHeight / 10)
         self._scoreManager = ScoreManager(self._screen, self._screenWidth, self._screenHeight)
 
-        self._laneNotes = Sheet().GetLaneNotes()
+        self._laneNotes = self._sheet.GetLaneNotesForInstrument(self._instrument)
         self._laneCnt = self._instrument.GetLaneCnt()
         self._InitLaneManager()
 
@@ -132,7 +132,6 @@ class RhythmGame:
         y = self._screenHeight
 
         # 노트 라인 구분선
-        """
         laneWidth = x / self._laneCnt
         for i in range(1, self._laneCnt):
             laneX = x + i * laneWidth
@@ -140,7 +139,6 @@ class RhythmGame:
             endPos = (laneX, y)
 
             pygame.draw.line(self._screen, "white", startPos, endPos, 1)
-        """
 
         # 히트 라인
         startPos = (x, self._hitLineY)

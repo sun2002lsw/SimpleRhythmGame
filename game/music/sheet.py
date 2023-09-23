@@ -1,35 +1,53 @@
+import sys
 from copy import deepcopy
 
 from .note import Note
 
+START_COUNT_DOWN_TIME = 2  # 시작할 때 준비 시간 카운트
+EPSILON = 0.0000000000001
 
 class Sheet:
-    def __init__(self):
-        self._laneNotes = dict()
+    def __init__(self, sheetName, sheet):
+        self._sheetName = sheetName
+        self._sheet = sheet
 
-    def GetLaneNotes(self):
-        self._laneNotes[0] = list()
-        self._laneNotes[1] = list()
-        self._laneNotes[2] = list()
-        self._laneNotes[3] = list()
+        self._CheckValidation()
 
-        note1 = Note(1, 3)
-        self._AddNote(0, note1)
-        self._AddNote(3, note1)
+    # 계이름 겹치는 시간은 없는지 확인
+    def _CheckValidation(self):
+        curSec = 0
 
-        note2 = Note(2, 1)
-        self._AddNote(1, note2)
+        for pitchInfo in self._sheet:
+            beginSec = pitchInfo["시작(초)"]
+            curSecWithEpsilon = curSec - EPSILON  # 1.2 + 0.3 하면 1.500000002 나옴;;
+            if beginSec < curSecWithEpsilon:
+                errorStr = "{0} overlapped time detected on {1} sec".format(self._sheetName, beginSec)
+                sys.exit(errorStr)
 
-        note3 = Note(2.5, 2)
-        self._AddNote(2, note3)
+            duration = pitchInfo["유지(초)"]
+            curSec = beginSec + duration
 
-        note4 = Note(5, 3)
-        self._AddNote(0, note4)
-        self._AddNote(3, note4)
+    # 해당 악기에 맞는 lane별 노트 반환
+    def GetLaneNotesForInstrument(self, instrument):
+        laneNotes = dict()
+        for i in range(0, instrument.GetLaneCnt()):
+            laneNotes[i] = list()
 
-        return self._laneNotes
+        for pitchInfo in self._sheet:
+            pitch = pitchInfo["계이름"]
+            beginSec = pitchInfo["시작(초)"] + START_COUNT_DOWN_TIME
+            duration = pitchInfo["유지(초)"]
 
-    # 해당 번호의 라인에 노트를 추가
-    def _AddNote(self, laneNum, note):
-        copyNote = deepcopy(note)
-        self._laneNotes[laneNum].append(copyNote)
+            note = Note(beginSec, duration)
+
+            for laneNum in instrument.GetLaneSetByPitch(pitch):
+                # 바로 앞의 노트랑 이어지면, 새로운 노트 넣지 말고 그냥 시간 연장
+                if len(laneNotes[laneNum]) > 0:
+                    if abs(laneNotes[laneNum][-1].EndSec - beginSec) < EPSILON:
+                        laneNotes[laneNum][-1].EndSec += duration
+                        continue
+                
+                copyNote = deepcopy(note)
+                laneNotes[laneNum].append(copyNote)
+
+        return laneNotes

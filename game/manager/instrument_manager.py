@@ -3,15 +3,30 @@ import sys
 import json
 from pathlib import Path
 
+from ..music.sheet import Sheet
 from ..music.instrument import Instrument
 
 
-class InstrumentManager:
+class music_manager:
     def __init__(self):
         self._instrument = dict()
+        self._sheet = dict()
 
         self._LoadInstrumentPitch("config/instrument")
         self._LoadInstrumentSound("config/sound")
+        self._LoadSheet("config/sheet")
+
+    def GetInstrument(self, instrument):
+        if instrument not in self._instrument:
+            sys.exit("{0} instrument does not exist".format(instrument))
+
+        return self._instrument[instrument]
+
+    def GetSheet(self, sheet):
+        if sheet not in self._sheet:
+            sys.exit("{0} sheet does not exist".format(sheet))
+
+        return self._sheet[sheet]
 
     def _LoadInstrumentPitch(self, relativePath):
         absPath = os.path.join(os.getcwd(), relativePath)
@@ -19,14 +34,13 @@ class InstrumentManager:
             sys.exit("{0} path does not exist".format(absPath))
 
         for instrumentJson in os.listdir(absPath):
+            instrumentName = Path(instrumentJson).stem
             instrumentJsonPath = os.path.join(absPath, instrumentJson)
 
-            instrument = Path(instrumentJson).stem
-            self._instrument[instrument] = Instrument()
-
+            self._instrument[instrumentName] = Instrument()
             with open(instrumentJsonPath, encoding='UTF8') as file:
                 pitchLaneData = json.load(file)
-                self._instrument[instrument].SetPitchLane(pitchLaneData)
+                self._instrument[instrumentName].SetPitchLane(pitchLaneData)
 
     def _LoadInstrumentSound(self, relativePath):
         absPath = os.path.join(os.getcwd(), relativePath)
@@ -43,8 +57,17 @@ class InstrumentManager:
                 path = os.path.join(instrumentSoundPath, soundMp3)
                 self._instrument[instrument].SetPitchSound(pitch, path)
 
-    def GetInstrument(self, instrument):
-        if instrument not in self._instrument:
-            sys.exit("{0} instrument does not exist".format(instrument))
+    def _LoadSheet(self, relativePath):
+        absPath = os.path.join(os.getcwd(), relativePath)
+        if not os.path.exists(absPath):
+            sys.exit("{0} path does not exist".format(absPath))
 
-        return self._instrument[instrument]
+        for sheetJson in os.listdir(absPath):
+            sheetName = Path(sheetJson).stem
+            sheetJsonPath = os.path.join(absPath, sheetJson)
+
+            with open(sheetJsonPath, encoding='UTF8') as file:
+                sheetData = json.load(file)
+                sheet = Sheet(sheetName, sheetData["악보"])
+
+                self._sheet[sheetName] = sheet

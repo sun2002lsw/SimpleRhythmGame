@@ -3,11 +3,11 @@ import pygame.display
 import etc
 import ui
 from .rhythm_game import *
-from .manager.instrument_manager import *
+from .manager.music_manager import *
 
 
 class MainMenu:
-    _TitleColors = ["red", "blue"]
+    _TitleColors = ["chocolate1", "darkblue"]
     _TitleChangeSec = 0.5
 
     def __init__(self, screen):
@@ -18,7 +18,7 @@ class MainMenu:
         self._height = height
 
         # 필수 준비물 (악기, 악보)
-        self._instrumentManager = music_manager()
+        self._musicManager = music_manager()
 
         # 게임 한판 끝나면, 다시 메뉴로 돌아오면서 다시 시작
         while True:
@@ -35,9 +35,10 @@ class MainMenu:
 
         # 버튼들 설정
         self._buttons = []
-        self._CreateButton(self._width / 2, self._height * (3 / 6), "게임 시작", self._StartRhythmGame)
-        self._CreateButton(self._width / 2, self._height * (4 / 6), "자동 사냥", None)
-        self._CreateButton(self._width / 2, self._height * (5 / 6), "나가기", etc.ExitGame)
+        self._CreateButton(self._width / 2, self._height * (4 / 8), "게임 하기", self._StartRhythmGame)
+        self._CreateButton(self._width / 2, self._height * (5 / 8), "음악 듣기", self._ListenRhythmGame)
+        self._CreateButton(self._width / 2, self._height * (6 / 8), "만든 사람", None)
+        self._CreateButton(self._width / 2, self._height * (7 / 8), "나가기", etc.ExitGame)
 
         self._Run()
 
@@ -116,8 +117,14 @@ class MainMenu:
             
         return False
 
-    # 리듬 게임 시작
+    # 게임 시작
     def _StartRhythmGame(self):
-        instrument = self._instrumentManager.GetInstrument("recorder")
-        sheet = self._instrumentManager.GetSheet("champion")
+        instrument = self._musicManager.GetInstrument("recorder")
+        sheet = self._musicManager.GetSheet("champion")
         RhythmGame(self._screen, instrument, sheet, False)
+
+    # 자동 플레이 (음악 듣기)
+    def _ListenRhythmGame(self):
+        instrument = self._musicManager.GetInstrument("recorder")
+        sheet = self._musicManager.GetSheet("champion")
+        RhythmGame(self._screen, instrument, sheet, True)

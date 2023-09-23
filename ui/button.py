@@ -45,11 +45,11 @@ class Button:
     # 버튼 생성
     def _DrawDefaultButton(self):
         self._defaultState = True
-        self._DrawButton(30, "black", (0, 128, 0), False)
+        self._DrawButton(30, "black", "chartreuse4", False)
 
     def _DrawActiveButton(self, textSize):
         self._defaultState = False
-        self._DrawButton(textSize, "white", (0, 128, 0), True)
+        self._DrawButton(textSize, "white", "chartreuse4", True)
 
     def _DrawFadeoutButton(self):
         self._defaultState = False

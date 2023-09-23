@@ -51,3 +51,17 @@ class Sheet:
                 laneNotes[laneNum].append(copyNote)
 
         return laneNotes
+
+    # 해당 시간의 계이름
+    def GetPitchByCurrentSec(self, currentSec):
+        for pitchInfo in self._sheet:
+            pitch = pitchInfo["계이름"]
+            beginSec = pitchInfo["시작(초)"] + START_COUNT_DOWN_TIME
+            duration = pitchInfo["유지(초)"]
+
+            if currentSec < beginSec:
+                break
+            if beginSec <= currentSec <= beginSec + duration:
+                return pitch
+
+        return ""

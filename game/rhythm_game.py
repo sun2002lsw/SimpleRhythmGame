@@ -6,7 +6,7 @@ from .manager import LaneManager
 from .manager import ScoreManager
 
 DropSecs = [5, 3, 2, 1.5, 1, 0.5, 0.3, 0.1]
-NoteColors = [(255, 255, 0), (0, 255, 0), (0, 0, 255)]
+NoteColors = [(185, 235, 255), (255, 255, 194), (81, 35, 200)]
 HitLinePos = 90  # 1 ~ 99 중에 선택
 
 
@@ -30,10 +30,13 @@ class RhythmGame:
         self._dropSecIdx = 4
         self._finishGame = False
 
+        # 양 옆의 각종 정보 표시 공간
         self._timeTextBox = TextBox(self._screen, self._screenWidth * 9 / 10, self._screenHeight / 10)
         self._speedTextBox = TextBox(self._screen, self._screenWidth / 10, self._screenHeight / 10)
+        self._pitchTextBox = TextBox(self._screen, self._screenWidth / 6, self._screenHeight / 2)
         self._scoreManager = ScoreManager(self._screen, self._screenWidth, self._screenHeight)
 
+        # 중앙의 노트 떨어지는 공간
         self._laneNotes = self._sheet.GetLaneNotesForInstrument(self._instrument)
         self._laneCnt = self._instrument.GetLaneCnt()
         self._InitLaneManager()
@@ -154,5 +157,8 @@ class RhythmGame:
         speed = str(self._dropSecIdx + 1)
         self._speedTextBox.Print("Speed: x" + speed, 20, True, "white", 255)
 
-        currentSec = "{:.1f}".format(self._currentSec)
-        self._timeTextBox.Print(currentSec + "s", 20, False, "white", 255)
+        currentSecStr = "{:.1f}".format(self._currentSec)
+        self._timeTextBox.Print(currentSecStr + "s", 20, False, "white", 255)
+
+        pitch = self._sheet.GetPitchByCurrentSec(self._currentSec)
+        self._pitchTextBox.Print(pitch, 75, True, "yellow", 255)

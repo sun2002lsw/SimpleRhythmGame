@@ -51,7 +51,7 @@ class Effect:
         y = self._hitLineY - 25 - 75 * effectSec
 
         textBox = TextBox(self._screen, x, y)
-        size = int(self._laneWidth / 2.5)
+        size = int(self._laneWidth / 4)
         alpha = 255 - int(effectSec * 250)
 
         textBox.Print(text, size, True, color, alpha)

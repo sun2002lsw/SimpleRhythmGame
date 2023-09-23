@@ -31,6 +31,7 @@ class RhythmGame:
     def _Start(self):
         self._dropSecIdx = 4
         self._finishGame = False
+        self._finishSec = self._sheet.GetFinishSec()
 
         self._instrument.Ready()
         self._sheet.Ready()
@@ -103,7 +104,7 @@ class RhythmGame:
                 startPitch = self._sheet.GetStartPitchByCurrentSec(self._currentSec)
                 self._instrument.PlayPitchSound(startPitch)
 
-            if self._finishGame:
+            if self._finishGame or self._finishSec < self._currentSec:
                 etc.ScreenWhiteOut(self._screen)
                 return
 

@@ -1,4 +1,3 @@
-import sys
 from copy import deepcopy
 
 from .lane_note import LaneNote
@@ -78,3 +77,7 @@ class Sheet:
                 return pitch
 
         return ""
+
+    def GetFinishSec(self):
+        _, beginSec, duration = self._sheet[-1]
+        return beginSec + duration + 5

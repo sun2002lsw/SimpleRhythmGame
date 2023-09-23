@@ -4,7 +4,7 @@ from .score_manager import ComboState
 
 
 class LaneManager:
-    def __init__(self, screen, laneLeftX, laneWidth, laneBottomY, hitLineY, notes, noteColor, noteDropSec):
+    def __init__(self, screen, laneLeftX, laneWidth, laneBottomY, hitLineY, notes, noteColor, noteDropSec, autoPlay):
         self._screen = screen
         self._laneLeftX = laneLeftX
         self._laneWidth = laneWidth
@@ -13,6 +13,8 @@ class LaneManager:
         self._notes = notes
         self._noteColor = noteColor
         self._noteDropSec = noteDropSec
+        self._autoPlay = autoPlay
+
         self._isPressing = False
         self._comboState = ComboState.NoChange
         self._lastMeltingComboSec = 0
@@ -32,13 +34,19 @@ class LaneManager:
             if note.BeginSec > currentSecond:
                 break  # 여기 i 부터는 아직 확인할 필요 없는 노트
 
+            # 쭉 떨어지고 있는 노트
             if note.State == LaneNoteState.Drop:
+                if self._autoPlay and currentSecond - 0.05 < note.BeginSec < currentSecond + 0.05:
+                    self.HandleKeyDown(currentSecond)
                 if currentSecond - 0.2 < note.BeginSec < currentSecond:
                     self._effectManager.StartOnce(EffectType.Danger)
                 if note.BeginSec < currentSecond - 0.2:
                     self._SetNoteMiss(note)
 
+            # 맞춰서 녹이고 있는 노트
             if note.State == LaneNoteState.Hit:
+                if self._autoPlay and currentSecond - 0.05 < note.EndSec < currentSecond + 0.05:
+                    self.HandleKeyUp(currentSecond)
                 if note.EndSec < currentSecond - 0.2:
                     self._SetNoteMiss(note)
                     self._effectManager.Stop(EffectType.Melting)

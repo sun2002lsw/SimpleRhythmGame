@@ -11,10 +11,11 @@ HitLinePos = 90  # 1 ~ 99 중에 선택
 
 
 class RhythmGame:
-    def __init__(self, screen, instrument, sheet):
+    def __init__(self, screen, instrument, sheet, autoPlay):
         self._screen = screen
         self._instrument = instrument
         self._sheet = sheet
+        self._autoPlay = autoPlay
 
         width, height = pygame.display.get_surface().get_size()
         self._screenWidth = width
@@ -59,7 +60,7 @@ class RhythmGame:
 
             mgr = LaneManager(self._screen,
                               laneLeftX, laneWidth, self._screenHeight, self._hitLineY,
-                              notes, noteColor, noteDropSec)
+                              notes, noteColor, noteDropSec, self._autoPlay)
 
             self._laneManagers[laneNum] = mgr
 
@@ -79,21 +80,31 @@ class RhythmGame:
                     pygame.quit()
                     sys.exit()
 
-                # 키보드 입력만 처리
-                if event.type == pygame.KEYDOWN:
-                    self._HandleKeyDown(event.key)
-                elif event.type == pygame.KEYUP:
-                    self._HandleKeyUp(event.key)
+                # 게임 키보드 입력 처리
+                if not self._autoPlay:
+                    if event.type == pygame.KEYDOWN:
+                        self._HandleKeyDown(event.key)
+                    elif event.type == pygame.KEYUP:
+                        self._HandleKeyUp(event.key)
 
+                # esc 키 누름
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                    self._finishGame = True
+
+            # 게임 화면에 그리기
             self._DrawGame()
+
+            # 자동 플레이인 경우 알아서 소리 재생
+            if self._autoPlay:
+                startPitch = self._sheet.GetStartPitchByCurrentSec(self._currentSec)
+                self._instrument.PlayPitchSound(startPitch)
+
             if self._finishGame:
                 return
 
     # 키 입력 처리
     def _HandleKeyDown(self, key):
-        if key == pygame.K_ESCAPE:  # esc 키 누름
-            self._finishGame = True
-        elif key == pygame.K_EQUALS:  # + 키 누름
+        if key == pygame.K_EQUALS:  # + 키 누름
             self._dropSecIdx = min(self._dropSecIdx + 1, DropSecs.__len__() - 1)
             self._ChangeNoteDropSec()
         elif key == pygame.K_MINUS:  # - 키 누름
@@ -162,6 +173,4 @@ class RhythmGame:
 
         pitch = self._sheet.GetPitchByCurrentSec(self._currentSec)
         self._pitchTextBox.Print(pitch, 75, True, "yellow", 255)
-
-        startPitch = self._sheet.GetStartPitchByCurrentSec(self._currentSec)
-        self._instrument.PlayPitchSound(startPitch)
+        

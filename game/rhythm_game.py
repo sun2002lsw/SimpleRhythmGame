@@ -1,6 +1,7 @@
 import pygame
 import sys
 
+import etc
 from ui import TextBox
 from .manager import LaneManager
 from .manager import ScoreManager
@@ -103,6 +104,7 @@ class RhythmGame:
                 self._instrument.PlayPitchSound(startPitch)
 
             if self._finishGame:
+                etc.ScreenWhiteOut(self._screen)
                 return
 
     # 키 입력 처리

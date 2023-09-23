@@ -1,44 +1,44 @@
 import sys
 from copy import deepcopy
 
-from .note import Note
+from .lane_note import LaneNote
 
-START_COUNT_DOWN_TIME = 2  # 시작할 때 준비 시간 카운트
 EPSILON = 0.0000000000001
+START_COUNT_DOWN_TIME = 1  # 시작할 때 준비 시간 카운트
+BEAT_GAP = 1/4  # 박자랑 박자 사이에 쉬는 시간을 몇 박자로 할 것인가
+
 
 class Sheet:
-    def __init__(self, sheetName, sheet):
+    def __init__(self, sheetName, sheetData):
+        self._sheet = list()
+        self._playedPitchBeginSec = list()
+
         self._sheetName = sheetName
-        self._sheet = sheet
+        self._ReadData(sheetData)
 
-        self._CheckValidation()
+    def _ReadData(self, sheetData):
+        oneBeatSec = 60 / sheetData["BPM"]
+        beginSec = START_COUNT_DOWN_TIME
 
-    # 계이름 겹치는 시간은 없는지 확인
-    def _CheckValidation(self):
-        curSec = 0
+        for data in sheetData["악보"]:
+            pitch = data["계이름"]
+            duration = data["박자"] * oneBeatSec
 
-        for pitchInfo in self._sheet:
-            beginSec = pitchInfo["시작(초)"]
-            curSecWithEpsilon = curSec - EPSILON  # 1.2 + 0.3 하면 1.500000002 나옴;;
-            if beginSec < curSecWithEpsilon:
-                errorStr = "{0} overlapped time detected on {1} sec".format(self._sheetName, beginSec)
-                sys.exit(errorStr)
+            note = (pitch, beginSec, duration)
+            self._sheet.append(note)
 
-            duration = pitchInfo["유지(초)"]
-            curSec = beginSec + duration
+            beginSec += duration + BEAT_GAP * oneBeatSec
 
-    # 해당 악기에 맞는 lane별 노트 반환
+    # 해당 악기에 맞는 lane 노트 반환
     def GetLaneNotesForInstrument(self, instrument):
+        self._playedPitchBeginSec = dict()  # 딱히 초기화 해줄 곳이 없어서 끼워 팔기
+
         laneNotes = dict()
         for i in range(0, instrument.GetLaneCnt()):
             laneNotes[i] = list()
 
-        for pitchInfo in self._sheet:
-            pitch = pitchInfo["계이름"]
-            beginSec = pitchInfo["시작(초)"] + START_COUNT_DOWN_TIME
-            duration = pitchInfo["유지(초)"]
-
-            note = Note(beginSec, duration)
+        for pitch, beginSec, duration in self._sheet:
+            laneNote = LaneNote(beginSec, duration)
 
             for laneNum in instrument.GetLaneSetByPitch(pitch):
                 # 바로 앞의 노트랑 이어지면, 새로운 노트 넣지 말고 그냥 시간 연장
@@ -47,21 +47,32 @@ class Sheet:
                         laneNotes[laneNum][-1].EndSec += duration
                         continue
                 
-                copyNote = deepcopy(note)
+                copyNote = deepcopy(laneNote)
                 laneNotes[laneNum].append(copyNote)
 
         return laneNotes
 
     # 해당 시간의 계이름
     def GetPitchByCurrentSec(self, currentSec):
-        for pitchInfo in self._sheet:
-            pitch = pitchInfo["계이름"]
-            beginSec = pitchInfo["시작(초)"] + START_COUNT_DOWN_TIME
-            duration = pitchInfo["유지(초)"]
-
+        for pitch, beginSec, duration in self._sheet:
             if currentSec < beginSec:
                 break
             if beginSec <= currentSec <= beginSec + duration:
+                return pitch
+
+        return ""
+
+    # 해당 시간에 딱 정확히 시작하는 계이름
+    def GetStartPitchByCurrentSec(self, currentSec):
+        for pitch, beginSec, duration in self._sheet:
+            if beginSec in self._playedPitchBeginSec:
+                continue
+
+            if currentSec < beginSec:
+                break
+
+            if beginSec <= currentSec <= beginSec + 0.1:
+                self._playedPitchBeginSec[beginSec] = True
                 return pitch
 
         return ""

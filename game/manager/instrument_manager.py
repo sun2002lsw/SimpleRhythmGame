@@ -68,6 +68,6 @@ class music_manager:
 
             with open(sheetJsonPath, encoding='UTF8') as file:
                 sheetData = json.load(file)
-                sheet = Sheet(sheetName, sheetData["악보"])
+                sheet = Sheet(sheetName, sheetData)
 
                 self._sheet[sheetName] = sheet

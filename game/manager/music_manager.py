@@ -12,9 +12,9 @@ class music_manager:
         self._instrument = dict()
         self._sheet = dict()
 
-        self._LoadInstrumentPitch("config/instrument")
-        self._LoadInstrumentSound("config/sound")
-        self._LoadSheet("config/sheet")
+        self._LoadInstrumentPitch("data/music/instrument")
+        self._LoadInstrumentSound("data/music/sound")
+        self._LoadSheet("data/music/sheet")
 
     def GetInstrument(self, instrument):
         if instrument not in self._instrument:

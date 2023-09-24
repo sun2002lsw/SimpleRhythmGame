@@ -49,12 +49,12 @@ class music_manager:
 
         for instrument in os.listdir(absPath):
             instrumentSoundPath = os.path.join(absPath, instrument)
-            for soundMp3 in os.listdir(instrumentSoundPath):
+            for sound in os.listdir(instrumentSoundPath):
                 if instrument not in self._instrument:
                     continue
 
-                pitch = Path(soundMp3).stem
-                path = os.path.join(instrumentSoundPath, soundMp3)
+                pitch = Path(sound).stem
+                path = os.path.join(instrumentSoundPath, sound)
                 self._instrument[instrument].SetPitchSound(pitch, path)
 
     def _LoadSheet(self, relativePath):

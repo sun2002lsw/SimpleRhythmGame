@@ -4,7 +4,7 @@ from .lane_note import LaneNote
 
 EPSILON = 0.0000000000001
 START_COUNT_DOWN_TIME = 2  # 시작할 때 준비 시간 카운트
-BEAT_GAP = 1/10  # 박자랑 박자 사이에 쉬는 시간을 몇 박자로 할 것인가
+BEAT_GAP = 1/16  # 박자랑 박자 사이에 쉬는 시간을 몇 박자로 할 것인가
 
 
 class Sheet:
@@ -41,7 +41,11 @@ class Sheet:
         for pitch, beginSec, duration in self._sheet:
             laneNote = LaneNote(beginSec, duration)
 
-            for laneNum in instrument.GetLaneSetByPitch(pitch):
+            laneSet = instrument.GetLaneSetByPitch(pitch)
+            if laneSet is None:  # 쉼표 처리
+                continue
+
+            for laneNum in laneSet:
                 # 바로 앞의 노트랑 이어지면, 새로운 노트 넣지 말고 그냥 시간 연장
                 if len(laneNotes[laneNum]) > 0:
                     if abs(laneNotes[laneNum][-1].EndSec - beginSec) < EPSILON:

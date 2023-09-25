@@ -8,6 +8,7 @@ class Instrument:
         self._soundByPitch = dict()
         self._laneCnt = 0
         self._pressingLanes = dict()
+        self._lastPlayedSound = None
 
     # 새롭게 게임 시작될 때 초기화
     def Ready(self):
@@ -38,6 +39,9 @@ class Instrument:
         return self._laneCnt
 
     def GetLaneSetByPitch(self, pitch):
+        if pitch not in self._laneSetByPitch:
+            return None
+
         return self._laneSetByPitch[pitch]
 
     # 키를 누름으로서 소리 재생
@@ -68,6 +72,9 @@ class Instrument:
         if pitch not in self._soundByPitch:
             return
 
+        if self._lastPlayedSound is not None:
+            mixer.Sound.stop(self._lastPlayedSound)
+
         sound = self._soundByPitch[pitch]
         mixer.Sound.play(sound)
-
+        self._lastPlayedSound = sound

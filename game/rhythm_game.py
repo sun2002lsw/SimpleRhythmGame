@@ -86,11 +86,10 @@ class RhythmGame:
                     sys.exit()
 
                 # 게임 키보드 입력 처리
-                if not self._autoPlay:
-                    if event.type == pygame.KEYDOWN:
-                        self._HandleKeyDown(event.key)
-                    elif event.type == pygame.KEYUP:
-                        self._HandleKeyUp(event.key)
+                if event.type == pygame.KEYDOWN:
+                    self._HandleKeyDown(event.key)
+                elif event.type == pygame.KEYUP:
+                    self._HandleKeyUp(event.key)
 
                 # esc 키 누름
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
@@ -116,13 +115,16 @@ class RhythmGame:
         elif key == pygame.K_MINUS:  # - 키 누름
             self._dropSecIdx = max(self._dropSecIdx - 1, 0)
             self._ChangeNoteDropSec()
-        elif pygame.K_0 <= key <= pygame.K_9:
+        elif not self._autoPlay and pygame.K_0 <= key <= pygame.K_9:
             laneNum = key - pygame.K_0
             if laneNum in self._laneManagers:
                 self._laneManagers[laneNum].HandleKeyDown(self._currentSec)
             self._instrument.PlayKeyDownSound(laneNum)
 
     def _HandleKeyUp(self, key):
+        if self._autoPlay:
+            return
+
         if pygame.K_0 <= key <= pygame.K_9:
             laneNum = key - pygame.K_0
             if laneNum in self._laneManagers:

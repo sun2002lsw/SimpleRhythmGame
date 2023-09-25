@@ -40,6 +40,7 @@ class Sheet:
         for i in range(0, instrument.GetLaneCnt()):
             laneNotes[i] = list()
 
+        lastPitch = None
         for pitch, beginSec, duration in self._sheet:
             laneNote = LaneNote(beginSec, duration)
 
@@ -48,14 +49,16 @@ class Sheet:
                 continue
 
             for laneNum in laneSet:
-                # 리코더니깐 손가락을 뗐다 붙였다 하지 말고, 그냥 종료 시간 연장으로 계속 누르고 있기
-                if len(laneNotes[laneNum]) > 0:
+                # 똑같은 음 누르는게 아니면, 손가락을 뗐다 붙였다 하지 말고 그냥 종료 시간 연장으로 계속 누르고 있기
+                if len(laneNotes[laneNum]) > 0 and lastPitch != pitch:
                     if abs(laneNotes[laneNum][-1].EndSec - beginSec) < self._beatGapSec + EPSILON:
                         laneNotes[laneNum][-1].EndSec = beginSec + duration
                         continue
                 
                 copyNote = deepcopy(laneNote)
                 laneNotes[laneNum].append(copyNote)
+
+            lastPitch = pitch
 
         return laneNotes
 
@@ -75,10 +78,7 @@ class Sheet:
             if beginSec in self._playedPitchBeginSec:
                 continue
 
-            if currentSec < beginSec:
-                break
-
-            if beginSec <= currentSec <= beginSec + 0.1:
+            if beginSec - 0.05 <= currentSec <= beginSec + 0.05:
                 self._playedPitchBeginSec[beginSec] = True
                 return pitch
 

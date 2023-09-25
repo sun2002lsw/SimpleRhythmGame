@@ -23,12 +23,20 @@ class ScoreManager:
         self._score = 0
 
     def AddComboState(self, comboState):
-        if comboState == ComboState.Hit:
-            self._combo += 1
-            self._score += self._combo
-            self._comboTick = pygame.time.get_ticks()
-        elif comboState == ComboState.Miss:
+        if comboState == comboState.NoChange:
+            return
+
+        if comboState == ComboState.Miss:
             self._combo = 0
+            return
+
+        # combo hit
+        self._combo += 1
+        self._score += self._combo
+        self._comboTick = pygame.time.get_ticks()
+
+        if comboState == ComboState.Perfect:
+            self._score += self._combo
 
     def Draw(self):
         self._DrawCombo()
@@ -48,6 +56,7 @@ class ScoreManager:
 
 
 class ComboState(Enum):
-    Hit = auto()        # 콤보 증가
+    Perfect = auto()    # 콤보 증가
+    Good = auto()       # 콤보 증가
     Miss = auto()       # 콤보 초기화
     NoChange = auto()   # 변화 없음

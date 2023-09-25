@@ -64,7 +64,7 @@ class Effect:
 
         x = self._laneCenterX
         y = self._hitLineY
-        radius = self._laneWidth / 2 * effectSec / interval
+        radius = (1 + effectSec / interval) * self._laneWidth / 4  # 절반 크기 먹고 시작
 
         pygame.draw.circle(self._screen, "white", (x, y), radius, width)
         return False

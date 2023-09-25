@@ -36,7 +36,7 @@ class LaneManager:
 
             # 쭉 떨어지고 있는 노트
             if note.State == LaneNoteState.Drop:
-                if self._autoPlay and currentSecond - 0.05 < note.BeginSec < currentSecond + 0.05:
+                if self._autoPlay and currentSecond - 1 < note.BeginSec < currentSecond:
                     self.HandleKeyDown(currentSecond)
                 if currentSecond - 0.2 < note.BeginSec < currentSecond:
                     self._effectManager.StartOnce(EffectType.Danger)
@@ -45,7 +45,7 @@ class LaneManager:
 
             # 맞춰서 녹이고 있는 노트
             if note.State == LaneNoteState.Hit:
-                if self._autoPlay and currentSecond - 0.05 < note.EndSec < currentSecond + 0.05:
+                if self._autoPlay and currentSecond - 0.1 < note.EndSec < currentSecond:
                     self.HandleKeyUp(currentSecond)
                 if note.EndSec < currentSecond - 0.2:
                     self._SetNoteMiss(note)
@@ -74,7 +74,7 @@ class LaneManager:
         self._effectManager.StartOnce(EffectType.Melting)
         if self._lastMeltingComboSec + 0.1 < currentSecond:
             self._lastMeltingComboSec = currentSecond
-            self._comboState = ComboState.Hit
+            self._comboState = ComboState.Perfect
 
     # 타이밍 맞춰서 키 누름
     def HandleKeyDown(self, currentSecond):
@@ -94,11 +94,12 @@ class LaneManager:
 
         if currentSecond - 0.2 < firstDropNote.BeginSec < currentSecond + 0.2:
             firstDropNote.State = LaneNoteState.Hit  # 타이밍 맞게 맞췄다
-            self._comboState = ComboState.Hit
             if currentSecond - 0.1 < firstDropNote.BeginSec < currentSecond + 0.1:
                 self._effectManager.Start(EffectType.PerfectHit)
+                self._comboState = ComboState.Perfect
             else:
                 self._effectManager.Start(EffectType.GoodHit)
+                self._comboState = ComboState.Good
         else:  # 너무 빨리 눌렀다
             self._SetNoteMiss(firstDropNote)
 
@@ -120,12 +121,13 @@ class LaneManager:
 
         if currentSecond - 0.2 < hitNote.EndSec < currentSecond + 0.2:
             self._notes.pop(hitNoteIdx)  # 노트 하나를 성공적으로 녹여버림
-            self._comboState = ComboState.Hit
             self._effectManager.Start(EffectType.Explosion)
             if currentSecond - 0.1 < hitNote.EndSec < currentSecond + 0.1:
                 self._effectManager.Start(EffectType.PerfectHit)
+                self._comboState = ComboState.Perfect
             else:
                 self._effectManager.Start(EffectType.GoodHit)
+                self._comboState = ComboState.Good
         else:  # 너무 빨리 뗐다
             self._SetNoteMiss(hitNote)
 

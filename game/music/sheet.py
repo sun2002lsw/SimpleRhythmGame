@@ -17,6 +17,8 @@ class Sheet:
 
     def _ReadData(self, sheetData):
         oneBeatSec = 60 / sheetData["BPM"]
+        self._beatGapSec = BEAT_GAP * oneBeatSec
+
         beginSec = START_COUNT_DOWN_TIME
 
         for data in sheetData["악보"]:
@@ -26,7 +28,7 @@ class Sheet:
             note = (pitch, beginSec, duration)
             self._sheet.append(note)
 
-            beginSec += duration + BEAT_GAP * oneBeatSec
+            beginSec += duration + self._beatGapSec
 
     # 새롭게 게임 시작될 때 초기화
     def Ready(self):
@@ -46,10 +48,10 @@ class Sheet:
                 continue
 
             for laneNum in laneSet:
-                # 바로 앞의 노트랑 이어지면, 새로운 노트 넣지 말고 그냥 시간 연장
+                # 리코더니깐 손가락을 뗐다 붙였다 하지 말고, 그냥 종료 시간 연장으로 계속 누르고 있기
                 if len(laneNotes[laneNum]) > 0:
-                    if abs(laneNotes[laneNum][-1].EndSec - beginSec) < EPSILON:
-                        laneNotes[laneNum][-1].EndSec += duration
+                    if abs(laneNotes[laneNum][-1].EndSec - beginSec) < self._beatGapSec + EPSILON:
+                        laneNotes[laneNum][-1].EndSec = beginSec + duration
                         continue
                 
                 copyNote = deepcopy(laneNote)

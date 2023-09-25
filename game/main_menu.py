@@ -119,16 +119,16 @@ class MainMenu:
 
     # 게임 시작
     def _StartRhythmGame(self):
-        instrument = self._musicManager.GetInstrument("recorder")
-        sheet = self._musicManager.GetSheet("champion")
+        instrument = self._musicManager.GetInstrument("piano")
+        sheet = self._musicManager.GetSheet("canon")
 
         etc.ScreenBlackOut(self._screen)
         RhythmGame(self._screen, instrument, sheet, False)
 
     # 자동 플레이 (음악 듣기)
     def _ListenRhythmGame(self):
-        instrument = self._musicManager.GetInstrument("recorder")
-        sheet = self._musicManager.GetSheet("champion")
+        instrument = self._musicManager.GetInstrument("piano")
+        sheet = self._musicManager.GetSheet("canon")
 
         etc.ScreenBlackOut(self._screen)
         RhythmGame(self._screen, instrument, sheet, True)

@@ -2,11 +2,13 @@ from pygame import mixer
 
 
 class Instrument:
-    def __init__(self):
+    def __init__(self, name):
+        self.Name = name
+
+        self._laneCnt = 0
         self._laneSetByPitch = dict()
         self._pitchByLaneSet = dict()
         self._soundByPitch = dict()
-        self._laneCnt = 0
         self._pressingLanes = dict()
         self._lastPlayedSound = None
 
@@ -14,8 +16,8 @@ class Instrument:
     def Ready(self):
         self._pressingLanes = dict()
 
-    def SetPitchLane(self, jsonData):
-        for pitch, lanes in jsonData.items():
+    def SetPitchLane(self, pitchLaneData):
+        for pitch, lanes in pitchLaneData.items():
             laneSet = frozenset(lanes)
 
             self._laneSetByPitch[pitch] = laneSet

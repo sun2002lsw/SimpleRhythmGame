@@ -8,14 +8,14 @@ BEAT_GAP = 1/16  # 박자랑 박자 사이에 쉬는 시간을 몇 박자로 할
 
 
 class Sheet:
-    def __init__(self, sheetName, sheetData):
+    def __init__(self, name):
+        self.Name = name
+        self._beatGapSec = 0
+
         self._sheet = list()
         self._playedPitchBeginSec = dict()
 
-        self._sheetName = sheetName
-        self._ReadData(sheetData)
-
-    def _ReadData(self, sheetData):
+    def MakeSheet(self, sheetData):
         oneBeatSec = 60 / sheetData["BPM"]
         self._beatGapSec = BEAT_GAP * oneBeatSec
 

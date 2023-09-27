@@ -1,6 +1,7 @@
 import os
 import sys
 import json
+from pygame import mixer
 from pathlib import Path
 
 from ..music.sheet import Sheet
@@ -11,6 +12,7 @@ class music_manager:
     def __init__(self):
         self._instrument = list()
         self._sheet = list()
+        self._sheetChangeSound = None
 
         self._curInstrumentIdx = -1     # 피아노를 시작 값으로
         self._curSheetIdx = 0           # 그냥 아무 곡이나 시작
@@ -18,17 +20,34 @@ class music_manager:
         self._LoadInstrumentPitch("data/music/instrument")
         self._LoadInstrumentSound("data/music/sound")
         self._LoadSheet("data/music/sheet")
+        self._LoadSheetChangeSound("data/interface/sheetChange.wav")
 
     def GetCurrentMusic(self):
         return self._instrument[self._curInstrumentIdx], self._sheet[self._curSheetIdx]
 
     # 악기 변경
     def ChangeInstrument(self, idxChange):
-        self._curInstrumentIdx += idxChange
+        if self._curInstrumentIdx + idxChange == len(self._instrument):
+            self._curInstrumentIdx = 0
+        elif self._curInstrumentIdx + idxChange == -1:
+            self._curInstrumentIdx = len(self._instrument) - 1
+        else:
+            self._curInstrumentIdx += idxChange
+
+    def ChangeInstrumentSound(self):
+        self._instrument[self._curInstrumentIdx].PlayPitchSound("도")
 
     # 악보 변경
     def ChangeSheet(self, idxChange):
-        self._curSheetIdx += idxChange
+        if self._curSheetIdx + idxChange == len(self._sheet):
+            self._curSheetIdx = 0
+        elif self._curSheetIdx + idxChange == -1:
+            self._curSheetIdx = len(self._sheet) - 1
+        else:
+            self._curSheetIdx += idxChange
+
+    def ChangeSheetSound(self):
+        mixer.Sound.play(self._sheetChangeSound)
 
     # 각 악기별 계이름이 몇번 lane 인지 추출
     def _LoadInstrumentPitch(self, relativePath):
@@ -95,3 +114,11 @@ class music_manager:
 
         if len(self._sheet) == 0:
             sys.exit("there are no sheet")
+
+    def _LoadSheetChangeSound(self, relativePath):
+        soundFilePath = os.path.join(os.getcwd(), relativePath)
+        if not os.path.exists(soundFilePath):
+            sys.exit("{0} path does not exist".format(soundFilePath))
+
+        self._sheetChangeSound = mixer.Sound(soundFilePath)
+        self._sheetChangeSound.set_volume(0.2)

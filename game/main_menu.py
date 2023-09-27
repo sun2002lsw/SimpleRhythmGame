@@ -32,6 +32,9 @@ class MainMenu:
 
         # 타이틀 설정
         self._CreateTitle()
+        
+        # 음악 텍스트 출력
+        self._CreateMusicText()
 
         # 버튼들 설정
         self._buttons = []
@@ -39,6 +42,10 @@ class MainMenu:
         self._CreateButton(self._width / 2, self._height * (5 / 8), "음악 듣기", self._ListenRhythmGame)
         self._CreateButton(self._width / 2, self._height * (6 / 8), "만든 사람", None)
         self._CreateButton(self._width / 2, self._height * (7 / 8), "나가기", etc.ExitGame)
+
+        # 음악 관련 텍스트 박스 출력
+        self._PrintInstrumentName()
+        self._PrintSheetName()
 
         self._Run()
 
@@ -61,6 +68,10 @@ class MainMenu:
                     self._HandleButtonPressing(mousePos)
                 else:
                     self._HandleButtonHovering(mousePos)
+
+                # 게임 키보드 입력 처리
+                if event.type == pygame.KEYDOWN:
+                    self._HandleKeyDown(event.key)
 
             # 타이틀은 계속 깜빡 깜빡
             self._ChangeTitleColor()
@@ -92,7 +103,52 @@ class MainMenu:
 
     def _PrintTitle(self):
         color = self._TitleColors[self._lastTitleColorIdx]
+        self._titleBox.Clear("white")
         self._titleBox.Print("예찬쌤의 리듬 게임", 100, True, color, 255)
+
+    def _CreateMusicText(self):
+        x = self._width / 4
+        y = self._height * (5 / 8)
+        self._instrumentBox = ui.TextBox(self._screen, x, y)
+
+        x = self._width * (3 / 4)
+        self._sheetBox = ui.TextBox(self._screen, x, y)
+
+        self._PrintInstrumentName()
+        self._PrintSheetName()
+
+    # 음악 관련 텍스트 출력
+    def _PrintInstrumentName(self):
+        instrument, _ = self._musicManager.GetCurrentMusic()
+        self._instrumentBox.Clear("white")
+        self._instrumentBox.Print(instrument.Name, 50, True, "black", 255)
+
+    def _PrintSheetName(self):
+        _, sheet = self._musicManager.GetCurrentMusic()
+        self._sheetBox.Clear("white")
+        self._sheetBox.Print(sheet.Name, 50, True, "black", 255)
+
+    # 화살표 눌러서 음악 설정
+    def _HandleKeyDown(self, key):
+        if key == pygame.K_LEFT or key == pygame.K_RIGHT:
+            self._ChangeInstrument(key)
+        elif key == pygame.K_UP or key == pygame.K_DOWN:
+            self._ChangeSheet(key)
+
+    def _ChangeInstrument(self, key):
+        idxChange = (key - pygame.K_RIGHT) * 2 - 1
+        idxChange = -idxChange  # 이렇게 하면 왼쪽은 -1, 오른쪽은 +1
+
+        self._musicManager.ChangeInstrument(idxChange)
+        self._PrintInstrumentName()
+        self._musicManager.ChangeInstrumentSound()
+
+    def _ChangeSheet(self, key):
+        idxChange = (key - pygame.K_DOWN) * 2 - 1
+
+        self._musicManager.ChangeSheet(idxChange)
+        self._PrintSheetName()
+        self._musicManager.ChangeSheetSound()
 
     # 버튼 추가
     def _CreateButton(self, x, y, text, clickFunc):

@@ -69,7 +69,7 @@ class Instrument:
         pitch = self._pitchByLaneSet[laneSet]
         self.PlayPitchSound(pitch)
 
-    # 해당 pitch에 맞는 소리 재생
+    # 해당 pitch 맞는 소리 재생
     def PlayPitchSound(self, pitch):
         if pitch not in self._soundByPitch:
             return

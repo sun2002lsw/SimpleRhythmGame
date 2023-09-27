@@ -1,6 +1,6 @@
 @echo off
 
 cd %~dp0
-cd /d "∏ÆµÎ ∞‘¿”"
+cd /d "∏ÆµÎ∞‘¿”"
 
 python main.py

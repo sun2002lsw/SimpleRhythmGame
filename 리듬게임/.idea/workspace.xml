@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="cdeb087d-93aa-41e7-b287-69b212fa93ff" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../게임하기.bat" beforeDir="false" afterPath="$PROJECT_DIR$/../게임하기.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/.idea/SimpleRythmGame.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/.idea/workspace.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/data/interface/buttonClick.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/data/interface/buttonHover.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/data/interface/buttonPress.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/data/interface/sheetChange.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/data/music/instrument/단소.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/data/music/instrument/리코더.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/data/music/instrument/피아노.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/data/music/sheet/싸이 - 챔피언.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/data/music/sheet/캐논 변주곡.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/data/music/sound/피아노/도#.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/data/music/sound/피아노/도.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/data/music/sound/피아노/도2#.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/data/music/sound/피아노/도2.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/data/music/sound/피아노/라#.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/data/music/sound/피아노/라.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/data/music/sound/피아노/라2.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/data/music/sound/피아노/레#.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/data/music/sound/피아노/레.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/data/music/sound/피아노/레2.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/data/music/sound/피아노/미.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/data/music/sound/피아노/미2.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/data/music/sound/피아노/솔#.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/data/music/sound/피아노/솔.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/data/music/sound/피아노/솔2.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/data/music/sound/피아노/시.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/data/music/sound/피아노/시2.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/data/music/sound/피아노/파#.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/data/music/sound/피아노/파.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/data/music/sound/피아노/파2.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/etc/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/etc/func.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/etc/screen_fadeout.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/game/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/game/lane_effect/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/game/lane_effect/danger_effect.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/game/lane_effect/effect.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/game/lane_effect/explosion_effect.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/game/lane_effect/good_hit_effect.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/game/lane_effect/melting_effect.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/game/lane_effect/miss_effect.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/game/lane_effect/perfect_hit_effect.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/game/main_menu.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/game/manager/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/game/manager/effect_manager.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/game/manager/lane_manager.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/game/manager/music_manager.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/game/manager/score_manager.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/game/music/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/game/music/instrument.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/game/music/lane_note.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/game/music/sheet.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/game/rhythm_game.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/main.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/ui/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/ui/button.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../리듬 게임/ui/text.py" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 0
+}</component>
+  <component name="ProjectId" id="2Vi9BJHjSufGTrXTI0fm8u1UQb1" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/Users/sun2002lsw/Desktop/SimpleRhythmGame/리듬게임"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\sun2002lsw\Desktop\SimpleRhythmGame\game\text_effect" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.main">
+    <configuration name="lane_manager" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="SimpleRythmGame" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/game/manager" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/game/manager/lane_manager.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="SimpleRythmGame" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.main" />
+        <item itemvalue="Python.lane_manager" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="cdeb087d-93aa-41e7-b287-69b212fa93ff" name="Changes" comment="" />
+      <created>1695307899717</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1695307899717</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/game/text_effect/__init__.py</url>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

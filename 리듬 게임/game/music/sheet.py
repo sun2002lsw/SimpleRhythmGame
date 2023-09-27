@@ -3,7 +3,8 @@ from copy import deepcopy
 from .lane_note import LaneNote
 
 EPSILON = 0.0000000000001
-START_COUNT_DOWN_TIME = 2  # 시작할 때 준비 시간 카운트
+START_COUNT_DOWN_TIME = 2  # 시작할 때 준비 시간
+FINISH_COUNT_DOWN_TIME = 3  # 끝나고 여유 시간
 BEAT_GAP = 1/16  # 박자랑 박자 사이에 쉬는 시간을 몇 박자로 할 것인가
 
 
@@ -86,4 +87,4 @@ class Sheet:
 
     def GetFinishSec(self):
         _, beginSec, duration = self._sheet[-1]
-        return beginSec + duration + 5
+        return beginSec + duration + FINISH_COUNT_DOWN_TIME

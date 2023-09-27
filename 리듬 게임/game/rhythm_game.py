@@ -182,5 +182,5 @@ class RhythmGame:
         self._timeTextBox.Print(currentSecStr + "s", 20, False, "white", 255)
 
         pitch = self._sheet.GetPitchByCurrentSec(self._currentSec)
-        self._pitchTextBox.Print(pitch, 75, True, "yellow", 255)
-        
+        if pitch != "쉼표":
+            self._pitchTextBox.Print(pitch, 75, True, "yellow", 255)

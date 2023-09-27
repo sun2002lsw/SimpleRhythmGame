@@ -12,8 +12,8 @@ class music_manager:
         self._instrument = list()
         self._sheet = list()
 
-        self._curInstrumentIdx = 0
-        self._curSheetIdx = 0
+        self._curInstrumentIdx = -1     # 피아노를 시작 값으로
+        self._curSheetIdx = 0           # 그냥 아무 곡이나 시작
 
         self._LoadInstrumentPitch("data/music/instrument")
         self._LoadInstrumentSound("data/music/sound")
@@ -24,23 +24,11 @@ class music_manager:
 
     # 악기 변경
     def ChangeInstrument(self, idxChange):
-        newIdx = self._curInstrumentIdx + idxChange
-        if newIdx < 0:
-            newIdx = newIdx + len(self._instrument)
-        elif newIdx >= len(self._instrument):
-            newIdx = newIdx - len(self._instrument)
-
-        self._curInstrumentIdx = newIdx
+        self._curInstrumentIdx += idxChange
 
     # 악보 변경
     def ChangeSheet(self, idxChange):
-        newIdx = self._curSheetIdx + idxChange
-        if newIdx < 0:
-            newIdx = newIdx + len(self._sheet)
-        elif newIdx >= len(self._instrument):
-            newIdx = newIdx - len(self._sheet)
-
-        self._curSheetIdx = newIdx
+        self._curSheetIdx += idxChange
 
     # 각 악기별 계이름이 몇번 lane 인지 추출
     def _LoadInstrumentPitch(self, relativePath):

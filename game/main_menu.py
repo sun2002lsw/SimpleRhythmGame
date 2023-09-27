@@ -1,6 +1,6 @@
 import pygame.display
+import webbrowser
 
-import etc
 import ui
 from .rhythm_game import *
 from .manager.music_manager import *
@@ -40,7 +40,7 @@ class MainMenu:
         self._buttons = []
         self._CreateButton(self._width / 2, self._height * (4 / 8), "게임 하기", self._StartRhythmGame)
         self._CreateButton(self._width / 2, self._height * (5 / 8), "음악 듣기", self._ListenRhythmGame)
-        self._CreateButton(self._width / 2, self._height * (6 / 8), "만든 사람", None)
+        self._CreateButton(self._width / 2, self._height * (6 / 8), "만든 사람", self._GitHubLink)
         self._CreateButton(self._width / 2, self._height * (7 / 8), "나가기", etc.ExitGame)
 
         # 음악 관련 텍스트 박스 출력
@@ -187,3 +187,7 @@ class MainMenu:
         
         instrument, sheet = self._musicManager.GetCurrentMusic()
         RhythmGame(self._screen, instrument, sheet, autoPlay)
+
+    # 만든 사람 정보
+    def _GitHubLink(self):
+        webbrowser.open(r"https://github.com/sun2002lsw/SimpleRhythmGame")

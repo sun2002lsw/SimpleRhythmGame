@@ -1,0 +1,6 @@
+@echo off
+
+cd %~dp0
+cd /d "∏ÆµÎ ∞‘¿”"
+
+python main.py

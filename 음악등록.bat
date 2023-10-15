@@ -4,7 +4,8 @@ set /P title=작업 내용을 말하거라:
 echo.
 
 cd %~dp0
-git checkout -b feature/edit-music-files
+git branch feature/edit-music-files master
+git checkout feature/edit-music-files
 git push --set-upstream origin feature/edit-music-files
 cls
 

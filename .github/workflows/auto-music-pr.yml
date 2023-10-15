@@ -1,6 +1,6 @@
 name: "Auto Music PR"
 on:
-  create:
+  push:
     branches:
       - feature/edit-music-files
 

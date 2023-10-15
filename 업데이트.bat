@@ -3,6 +3,13 @@
 cd %~dp0
 
 git fetch --all
+echo.
+
 git reset --hard origin/master
-git pull
+echo.
+
 git checkout master
+echo.
+
+git pull
+echo.

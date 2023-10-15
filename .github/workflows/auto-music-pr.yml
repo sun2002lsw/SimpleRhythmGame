@@ -2,14 +2,12 @@ name: "Auto Music PR"
 on:
   push:
     branches:
-      - feature/edit-music-files  # 해당 브랜치에서만 실행
+      - feature/edit-music-files
 
 jobs:
   auto-create-pr:
     runs-on: ubuntu-latest
     steps:
-    - name: Output Run Number
-      run: echo ${{ github.run_number }}
     - uses: actions/checkout@v4
     - name: Create pull request
       uses: thomaseizinger/create-pull-request@master
@@ -18,3 +16,5 @@ jobs:
         head: ${{ github.ref }}
         base: master
         title: ${{ github.event.head_commit.message }}
+    - name: Output Run Number
+      run: echo ${{ github.run_number }}

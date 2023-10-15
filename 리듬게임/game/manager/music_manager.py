@@ -14,8 +14,8 @@ class music_manager:
         self._sheet = list()
         self._sheetChangeSound = None
 
-        self._curInstrumentIdx = -1     # 피아노를 시작 값으로
-        self._curSheetIdx = 0           # 그냥 아무 곡이나 시작
+        self._curInstrumentIdx = 0
+        self._curSheetIdx = 0
 
         self._LoadInstrumentPitch("data/music/instrument")
         self._LoadInstrumentSound("data/music/sound")

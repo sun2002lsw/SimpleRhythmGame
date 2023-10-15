@@ -11,3 +11,9 @@ echo.
 
 git pull
 echo.
+
+git checkout master
+echo.
+
+:: 디버깅을 위해서 창을 켜놓고 있기
+pause

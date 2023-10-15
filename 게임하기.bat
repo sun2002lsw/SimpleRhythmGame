@@ -10,6 +10,7 @@ cd %~dp0
 cd .\리듬게임\
 
 python main.py
+echo.
 
 :: 디버깅을 위해서 창을 켜놓고 있기
 pause

@@ -1,0 +1,17 @@
+@echo off
+
+set /P title=작업 내용을 말하거라: 
+echo.
+
+cd %~dp0
+git checkout -b feature/edit-music-files
+git push --set-upstream origin feature/edit-music-files
+cls
+
+git add -A && git commit -m "%title%"
+echo.
+git push
+echo.
+
+:: 디버깅을 위해서 창을 켜놓고 있기
+pause

@@ -6,7 +6,6 @@ on:
 
 jobs:
   auto-create-pr:
-    # if: github.run_number == 1  # 처음 push에만 실행
     runs-on: ubuntu-latest
     steps:
     - name: Output Run Number

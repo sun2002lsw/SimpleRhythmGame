@@ -7,10 +7,9 @@ cd %~dp0
 git branch feature/edit-music-files master
 git checkout feature/edit-music-files
 git add -A && git commit -m "%title%"
-git push --set-upstream origin feature/edit-music-files
 cls
 
-git push
+git push --set-upstream origin feature/edit-music-files
 echo.
 
 :: 디버깅을 위해서 창을 켜놓고 있기

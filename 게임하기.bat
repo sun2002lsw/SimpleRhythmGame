@@ -1,7 +1,7 @@
 @echo off
 
 :: 그냥 마음 편하게 업데이트하고 시작
-pip install --upgrade pip
+python -m pip install --upgrade pip
 pip install pygame
 cls
 

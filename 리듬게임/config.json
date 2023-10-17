@@ -1,0 +1,10 @@
+{
+  "sheetChangeSound" : "data/interface/sheetChange.wav",
+  "buttonHoverSound" : "data/interface/buttonHover.wav",
+  "buttonPressSound" : "data/interface/buttonPress.wav",
+  "buttonClickSound" : "data/interface/buttonClick.mp3",
+  
+  "musicInstrumentSoundPath" : "data/music/sound/",
+  "musicInstrumentPath" : "data/music/instrument/",
+  "musicSheetPath" : "data/music/sheet/"
+}

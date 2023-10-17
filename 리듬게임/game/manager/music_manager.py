@@ -17,10 +17,10 @@ class music_manager:
         self._curInstrumentIdx = 0
         self._curSheetIdx = 0
 
-        self._LoadInstrumentPitch("data/music/instrument")
-        self._LoadInstrumentSound("data/music/sound")
-        self._LoadSheet("data/music/sheet")
-        self._LoadSheetChangeSound("data/interface/sheetChange.wav")
+        self._LoadInstrumentPitch()
+        self._LoadInstrumentSound()
+        self._LoadSheet()
+        self._LoadSheetChangeSound()
 
     def GetCurrentMusic(self):
         return self._instrument[self._curInstrumentIdx], self._sheet[self._curSheetIdx]
@@ -50,14 +50,14 @@ class music_manager:
         mixer.Sound.play(self._sheetChangeSound)
 
     # 각 악기별 계이름이 몇번 lane 인지 추출
-    def _LoadInstrumentPitch(self, relativePath):
-        absPath = os.path.join(os.getcwd(), relativePath)
-        if not os.path.exists(absPath):
-            sys.exit("{0} path does not exist".format(absPath))
+    def _LoadInstrumentPitch(self):
+        with open("config.json") as file:
+            config = json.load(file)
+            instrumentPath = os.path.join(os.getcwd(), config["musicInstrumentPath"])
 
-        for instrumentJson in os.listdir(absPath):
+        for instrumentJson in os.listdir(instrumentPath):
             instrumentName = Path(instrumentJson).stem
-            instrumentJsonPath = os.path.join(absPath, instrumentJson)
+            instrumentJsonPath = os.path.join(instrumentPath, instrumentJson)
 
             instrument = Instrument(instrumentName)
             with open(instrumentJsonPath, encoding='UTF8') as file:
@@ -70,14 +70,14 @@ class music_manager:
             sys.exit("there are no instrument")
 
     # 각 악기별 계이름의 소리 추출
-    def _LoadInstrumentSound(self, relativePath):
-        absPath = os.path.join(os.getcwd(), relativePath)
-        if not os.path.exists(absPath):
-            sys.exit("{0} path does not exist".format(absPath))
+    def _LoadInstrumentSound(self):
+        with open("config.json") as file:
+            config = json.load(file)
+            instrumentSoundPath = os.path.join(os.getcwd(), config["musicInstrumentSoundPath"])
 
         # 각 악기 이름 폴더에 대하여
-        for instrumentName in os.listdir(absPath):
-            instrumentSoundPath = os.path.join(absPath, instrumentName)
+        for instrumentName in os.listdir(instrumentSoundPath):
+            instrumentSoundPath = os.path.join(instrumentSoundPath, instrumentName)
 
             # 해당하는 악기를 찾고
             targetInstrument = None
@@ -96,14 +96,14 @@ class music_manager:
                 targetInstrument.SetPitchSound(pitch, path)
 
     # 각 악보 추출
-    def _LoadSheet(self, relativePath):
-        absPath = os.path.join(os.getcwd(), relativePath)
-        if not os.path.exists(absPath):
-            sys.exit("{0} path does not exist".format(absPath))
+    def _LoadSheet(self):
+        with open("config.json") as file:
+            config = json.load(file)
+            sheetPath = os.path.join(os.getcwd(), config["musicSheetPath"])
 
-        for sheetJson in os.listdir(absPath):
+        for sheetJson in os.listdir(sheetPath):
             sheetName = Path(sheetJson).stem
-            sheetJsonPath = os.path.join(absPath, sheetJson)
+            sheetJsonPath = os.path.join(sheetPath, sheetJson)
 
             sheet = Sheet(sheetName)
             with open(sheetJsonPath, encoding='UTF8') as file:
@@ -115,10 +115,10 @@ class music_manager:
         if len(self._sheet) == 0:
             sys.exit("there are no sheet")
 
-    def _LoadSheetChangeSound(self, relativePath):
-        soundFilePath = os.path.join(os.getcwd(), relativePath)
-        if not os.path.exists(soundFilePath):
-            sys.exit("{0} path does not exist".format(soundFilePath))
+    def _LoadSheetChangeSound(self):
+        with open("config.json") as file:
+            config = json.load(file)
+            changeSoundPath = os.path.join(os.getcwd(), config["sheetChangeSound"])
 
-        self._sheetChangeSound = mixer.Sound(soundFilePath)
+        self._sheetChangeSound = mixer.Sound(changeSoundPath)
         self._sheetChangeSound.set_volume(0.2)

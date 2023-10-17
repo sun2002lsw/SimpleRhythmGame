@@ -1,5 +1,6 @@
 import os
 import sys
+import json
 import pygame
 
 BUTTON_SIZE = 100
@@ -17,26 +18,25 @@ class Button:
         self._DrawDefaultButton()
         self._defaultState = True
 
-        self._LoadButtonSound("data/interface")
+        self._LoadButtonSound()
         self._alreadyHoverSound = False
         self._alreadyPressSound = False
 
-    def _LoadButtonSound(self, relativePath):
-        absPath = os.path.join(os.getcwd(), relativePath)
-        if not os.path.exists(absPath):
-            sys.exit("{0} path does not exist".format(absPath))
+    def _LoadButtonSound(self):
+        with open("config.json") as file:
+            config = json.load(file)
 
-        filePath = os.path.join(absPath, "buttonHover.wav")
-        self._hoverSound = pygame.mixer.Sound(filePath)
-        self._hoverSound.set_volume(0.1)
+            hoverSoundPath = os.path.join(os.getcwd(), config["buttonHoverSound"])
+            self._hoverSound = pygame.mixer.Sound(hoverSoundPath)
+            self._hoverSound.set_volume(0.1)
 
-        filePath = os.path.join(absPath, "buttonPress.wav")
-        self._pressSound = pygame.mixer.Sound(filePath)
-        self._pressSound.set_volume(0.3)
+            pressSoundPath = os.path.join(os.getcwd(), config["buttonPressSound"])
+            self._pressSound = pygame.mixer.Sound(pressSoundPath)
+            self._pressSound.set_volume(0.3)
 
-        filePath = os.path.join(absPath, "buttonClick.mp3")
-        self._clickSound = pygame.mixer.Sound(filePath)
-        self._clickSound.set_volume(0.1)
+            clickSoundPath = os.path.join(os.getcwd(), config["buttonClickSound"])
+            self._clickSound = pygame.mixer.Sound(clickSoundPath)
+            self._clickSound.set_volume(0.1)
 
     # 마우스를 버튼 위에 올렸을 때
     def Hovering(self, mousePos):

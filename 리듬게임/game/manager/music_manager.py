@@ -1,5 +1,4 @@
 import os
-import sys
 import json
 from pygame import mixer
 from pathlib import Path
@@ -66,9 +65,6 @@ class music_manager:
 
             self._instrument.append(instrument)
 
-        if len(self._instrument) == 0:
-            sys.exit("there are no instrument")
-
     # 각 악기별 계이름의 소리 추출
     def _LoadInstrumentSound(self):
         with open("config.json") as file:
@@ -111,9 +107,6 @@ class music_manager:
                 sheet.MakeSheet(sheetData)
 
             self._sheet.append(sheet)
-
-        if len(self._sheet) == 0:
-            sys.exit("there are no sheet")
 
     def _LoadSheetChangeSound(self):
         with open("config.json") as file:

@@ -1,7 +1,9 @@
+import pytest
 from common import *
 from pathlib import Path
 
 
+@pytest.mark.order(3)
 # music 관련 경로에 있는 모든 파일은 유효한 json 파일이어야 함
 def test_music_json_validation():
     config = getConfig()
@@ -17,6 +19,7 @@ def test_music_json_validation():
     assert len(invalidJsonFilePath) == 0, failMsg
 
 
+@pytest.mark.order(4)
 # musicInstrumentPath 경로에 있는 악기 파일은
 # 계이름이 겹쳐선 안 되고, 라인 집합도 겹치는게 없어야 함
 def test_instrument_validation():
@@ -47,6 +50,7 @@ def test_instrument_validation():
             pitchByLaneTuple[laneTuple] = pitch
 
 
+@pytest.mark.order(5)
 # 악기 파일에 정의된 계이름은 sound 악기 폴더에 소리 파일이 있어야 함
 def test_instrument_sound():
     pass

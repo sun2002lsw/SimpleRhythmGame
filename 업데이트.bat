@@ -11,5 +11,8 @@ echo.
 git reset --hard origin/master
 echo.
 
-git branch -D feature/edit-music-files master
+git branch -D feature/edit-music-files
+echo.
+
+git fetch --all
 echo.

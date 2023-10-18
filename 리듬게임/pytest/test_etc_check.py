@@ -1,6 +1,8 @@
+import pytest
 from common import *
 
 
+@pytest.mark.order(1)
 def test_config_exist():
     configPath = getAbsPath("config.json")
 
@@ -12,6 +14,7 @@ def test_config_exist():
     assert len(invalidJsonFilePath) == 0, failMsg
 
 
+@pytest.mark.order(2)
 def test_interface_sound_files_exist():
     config = getConfig()
 
@@ -20,4 +23,3 @@ def test_interface_sound_files_exist():
         resourcePath = getAbsPath(path)
 
         assert os.path.exists(resourcePath), failMsg
-

@@ -3,11 +3,7 @@ import json
 
 
 def getAbsPath(relativePath):
-    return os.path.join(os.getcwd(), "../" + relativePath)
-
-
-def getRelativePath(absPath):
-    return absPath.split("..")[-1]
+    return os.path.join(os.getcwd(), "리듬게임/" + relativePath)
 
 
 def getConfig():
@@ -29,7 +25,7 @@ def checkOneJsonFile(path):
         try:
             json.load(file)
         except ValueError as e:
-            return getRelativePath(path)
+            return os.path.basename(file.name)
 
     return ""
 
@@ -42,6 +38,6 @@ def checkDirJsonFiles(path):
             try:
                 json.load(file)
             except ValueError as e:
-                return getRelativePath(jsonFilePath)
+                return os.path.basename(file.name)
 
     return ""

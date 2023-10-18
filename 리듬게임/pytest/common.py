@@ -3,7 +3,7 @@ import json
 
 
 def getAbsPath(relativePath):
-    return os.path.join(os.getcwd(), relativePath)
+    return os.path.join(os.getcwd(), "리듬게임/" + relativePath)
 
 
 def getConfig():

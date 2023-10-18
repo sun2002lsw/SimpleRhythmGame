@@ -10,3 +10,6 @@ echo.
 
 git reset --hard origin/master
 echo.
+
+git branch -D feature/edit-music-files master
+echo.

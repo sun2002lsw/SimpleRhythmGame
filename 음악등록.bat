@@ -4,10 +4,15 @@ set /P title=작업 내용을 말하거라:
 echo.
 
 cd %~dp0
+
 git branch feature/edit-music-files master
+echo.
+
 git checkout feature/edit-music-files
+echo.
+
 git add -A && git commit -m "%title%"
-cls
+echo.
 
 git push --set-upstream origin feature/edit-music-files
 echo.

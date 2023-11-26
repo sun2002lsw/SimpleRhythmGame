@@ -73,7 +73,7 @@ class music_manager:
 
         # 각 악기 이름 폴더에 대하여
         for instrumentName in os.listdir(instrumentSoundPath):
-            instrumentSoundPath = os.path.join(instrumentSoundPath, instrumentName)
+            instrumentPitchPath = os.path.join(instrumentSoundPath, instrumentName)
 
             # 해당하는 악기를 찾고
             targetInstrument = None
@@ -86,9 +86,9 @@ class music_manager:
                 continue
 
             # 소리 파일을 전부 할당
-            for sound in os.listdir(instrumentSoundPath):
+            for sound in os.listdir(instrumentPitchPath):
                 pitch = Path(sound).stem
-                path = os.path.join(instrumentSoundPath, sound)
+                path = os.path.join(instrumentPitchPath, sound)
                 targetInstrument.SetPitchSound(pitch, path)
 
     # 각 악보 추출

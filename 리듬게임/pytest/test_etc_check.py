@@ -19,7 +19,7 @@ def test_interface_sound_files_exist():
     config = getConfig()
 
     for key, path in config.items():
-        failMsg = "{0}: {1} path does not exist".format(key, path)
+        failMsg = "{0} - {1} path does not exist".format(key, path)
         resourcePath = getAbsPath(path)
 
         assert os.path.exists(resourcePath), failMsg

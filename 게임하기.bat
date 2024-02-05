@@ -1,7 +1,7 @@
 @echo off
 
 :: 그냥 마음 편하게 업데이트하고 시작
-python -m pip install --upgrade pip
+pip install --upgrade pip
 pip install pygame
 cls
 
@@ -9,7 +9,7 @@ cls
 cd %~dp0
 cd .\리듬게임\
 
-python main.py
+py main.py
 echo.
 
 :: 디버깅을 위해서 창을 켜놓고 있기

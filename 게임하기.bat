@@ -5,7 +5,7 @@ cd %~dp0
 call .\.venv\Scripts\activate
 
 :: play game
-cd .\¸®µë°ÔÀÓ\
+cd .\ë¦¬ë“¬ê²Œìž„\
 python main.py
 echo.
 

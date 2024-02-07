@@ -1,5 +1,5 @@
 # music & sound data files
-리듬게임/data/* linguist-vendored
+리듬게임/data/** linguist-vendored
 
-# system files
-.venv/* linguist-vendored
+# python virtual environment
+.venv/** linguist-vendored

@@ -1,11 +1,13 @@
 @echo off
 cd %~dp0
 
-:: use virtual environment
+:: use virtual environment for pygame
 call .\.venv\Scripts\activate
 
-:: play game
-cd .\리듬게임\
+:: move working directory
+cd .\simpleRhythmGame\
+
+:: play game on python 3.11
 python main.py
 echo.
 

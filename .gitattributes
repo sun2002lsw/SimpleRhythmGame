@@ -2,5 +2,4 @@
 리듬게임/data/* linguist-vendored
 
 # system files
-.github/* linguist-vendored
-.venv/*   linguist-vendored
+.venv/* linguist-vendored

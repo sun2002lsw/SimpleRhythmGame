@@ -1,0 +1,6 @@
+# music & sound data files
+¸®µë°ÔÀÓ/data/*	linguist-vendored
+
+# system files
+.github/*		linguist-vendored
+.venv/*			linguist-vendored

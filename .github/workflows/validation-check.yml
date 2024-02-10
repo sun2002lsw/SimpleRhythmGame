@@ -15,17 +15,18 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python 3.10
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Set up Python
       uses: actions/setup-python@v3
       with:
-        python-version: "3.10"
-    - name: update pip & install flake8
+        python-version: "3.11"
+    - name: Install flake8
       run: |
-        python -m pip install --upgrade pip
         pip install flake8
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Lint by flake8
+      working-directory: ./simpleRhythmGame
       run: |
         # stop the build if there are Python syntax errors or undefined names
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
@@ -35,14 +36,14 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python 3.10
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Set up Python
       uses: actions/setup-python@v3
       with:
-        python-version: "3.10"
-    - name: update pip & install pytest
+        python-version: "3.11"
+    - name: Install pytest
       run: |
-        python -m pip install --upgrade pip
         pip install pytest pytest-order
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Test by pytest

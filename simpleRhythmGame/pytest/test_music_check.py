@@ -43,8 +43,8 @@ def test_instrument_validation():
                                    .format(instrumentName, pitch, lanes[idx]))
                         assert lanes[idx - 1] != lanes[idx], failMsg
 
+                laneTuple = tuple(lanes)
                 if "beatPractice" not in instrumentName:
-                    laneTuple = tuple(lanes)
                     failMsg = ("{0} instrument - {1} pitch and {2} pitch have same lanes"
                                .format(instrumentName, pitchByLaneTuple.get(laneTuple), pitch))
                     assert laneTuple not in pitchByLaneTuple, failMsg

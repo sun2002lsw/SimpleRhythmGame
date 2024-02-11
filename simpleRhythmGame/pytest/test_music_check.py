@@ -22,6 +22,7 @@ def test_music_json_validation():
 @pytest.mark.order(4)
 # musicInstrumentPath 경로에 있는 악기 파일은
 # 계이름이 겹쳐선 안 되고, 라인 집합도 겹치는게 없어야 함
+# 단, beatPractice 악기는 라인 집합이 겹쳐도 된다
 def test_instrument_validation():
     config = getConfig()
     instrumentPath = getAbsPath(config["musicInstrumentPath"])
@@ -42,10 +43,11 @@ def test_instrument_validation():
                                    .format(instrumentName, pitch, lanes[idx]))
                         assert lanes[idx - 1] != lanes[idx], failMsg
 
-                laneTuple = tuple(lanes)
-                failMsg = ("{0} instrument - {1} pitch and {2} pitch have same lanes"
-                           .format(instrumentName, pitchByLaneTuple.get(laneTuple), pitch))
-                assert laneTuple not in pitchByLaneTuple, failMsg
+                if "beatPractice" in instrumentName:
+                    laneTuple = tuple(lanes)
+                    failMsg = ("{0} instrument - {1} pitch and {2} pitch have same lanes"
+                               .format(instrumentName, pitchByLaneTuple.get(laneTuple), pitch))
+                    assert laneTuple not in pitchByLaneTuple, failMsg
 
                 pitchByLaneTuple[laneTuple] = pitch
 

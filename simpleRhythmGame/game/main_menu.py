@@ -19,11 +19,12 @@ class MainMenu:
 
         # 게임 한판 끝나면, 다시 메뉴로 돌아오면서 처음부터 시작
         while True:
+            self._musicManager.ResetCurrentMusic()
             self._instrumentSelected = False
             self._gameModeSelected = False
             self._sheetSelected = False
             self._autoPlay = False
-            
+
             self._Start()
 
     # 메인 메뉴에서 순서대로 선택 진행
@@ -72,6 +73,15 @@ class MainMenu:
 
     # 악기 선택 과정
     def _StartInstrumentSelection(self):
+        # 일단 beatPractice가 아닌 악기를 선택해서 시작
+        while True:
+            self._musicManager.ChangeInstrument(1)
+
+            curInstrument, _ = self._musicManager.GetCurrentMusic()
+            if "beatPractice" not in curInstrument.Name:
+                break
+
+        # 메뉴 그리기
         x = self._width * (1 / 2)
         y = self._height * (1 / 2)
         guideBox = ui.TextBox(self._screen, x, y)
@@ -106,14 +116,20 @@ class MainMenu:
 
                     # 화살표: 악기 바꾸기
                     if key == pygame.K_LEFT or key == pygame.K_RIGHT:
-                        instrumentBox.Clear("white")
+                        self._musicManager.ChangeInstrumentSound()
 
                         idxChange = (key - pygame.K_RIGHT) * 2 - 1
                         idxChange = -idxChange  # 이렇게 하면 왼쪽은 -1, 오른쪽은 +1
-                        self._musicManager.ChangeInstrument(idxChange)
-                        self._musicManager.ChangeInstrumentSound()
 
-                        curInstrument, _ = self._musicManager.GetCurrentMusic()
+                        # beatPractice 악기를 제외하고 선택
+                        while True:
+                            self._musicManager.ChangeInstrument(idxChange)
+
+                            curInstrument, _ = self._musicManager.GetCurrentMusic()
+                            if "beatPractice" not in curInstrument.Name:
+                                break
+
+                        instrumentBox.Clear("white")
                         instrumentBox.Print(curInstrument.Name, 50, True, "black", 255)
 
                     # 엔터: 악기 선택 완료
@@ -178,13 +194,34 @@ class MainMenu:
 
         return False
 
-    # 박자 연습 (지정된 악보를 연주)
+    # 박자 연습 (지정된 악기와 악보를 연주)
     def _BeatPractice(self):
+        curInstrument, curSheet = self._musicManager.GetCurrentMusic()
+        beatInstrumentName = curInstrument.Name + " - beatPractice"
+
+        # 지정된 악기를 찾기
+        while curInstrument.Name != beatInstrumentName:
+            self._musicManager.ChangeInstrument(1)
+            curInstrument, _ = self._musicManager.GetCurrentMusic()
+            
+        # 지정된 악보를 찾기
+        while curSheet.Name != "beatPractice":
+            self._musicManager.ChangeSheet(1)
+            _, curSheet = self._musicManager.GetCurrentMusic()
+
+        # 악기와 악보 선택 완료
         self._gameModeSelected = True
         self._sheetSelected = True
-
+                
     # 음계 연습 (지정된 악보를 연주)
     def _PitchPractice(self):
+        _, curSheet = self._musicManager.GetCurrentMusic()
+
+        # 지정된 악보를 찾기
+        while curSheet.Name != "pitchPractice":
+            self._musicManager.ChangeSheet(1)
+            _, curSheet = self._musicManager.GetCurrentMusic()
+
         self._gameModeSelected = True
         self._sheetSelected = True
 
@@ -199,6 +236,15 @@ class MainMenu:
 
     # 악보 선택 과정
     def _StartSheetSelection(self):
+        # 일단 Practice가 아닌 악보를 선택해서 시작
+        while True:
+            self._musicManager.ChangeSheet(1)
+
+            _, curSheet = self._musicManager.GetCurrentMusic()
+            if "Practice" not in curSheet.Name:
+                break
+                
+        # 메뉴 그리기
         x = self._width * (1 / 2)
         y = self._height * (1 / 2)
         guideBox = ui.TextBox(self._screen, x, y)
@@ -234,14 +280,20 @@ class MainMenu:
 
                     # 화살표: 악보 바꾸기
                     if key == pygame.K_LEFT or key == pygame.K_RIGHT:
-                        sheetBox.Clear("white")
+                        self._musicManager.ChangeSheetSound()
 
                         idxChange = (key - pygame.K_RIGHT) * 2 - 1
                         idxChange = -idxChange  # 이렇게 하면 왼쪽은 -1, 오른쪽은 +1
-                        self._musicManager.ChangeSheet(idxChange)
-                        self._musicManager.ChangeSheetSound()
 
-                        _, curSheet = self._musicManager.GetCurrentMusic()
+                        # Practice 악보를 제외하고 선택
+                        while True:
+                            self._musicManager.ChangeSheet(idxChange)
+
+                            _, curSheet = self._musicManager.GetCurrentMusic()
+                            if "Practice" not in curSheet.Name:
+                                break
+
+                        sheetBox.Clear("white")
                         sheetBox.Print(curSheet.Name, 50, True, "black", 255)
 
                     # 엔터: 악보 선택 완료

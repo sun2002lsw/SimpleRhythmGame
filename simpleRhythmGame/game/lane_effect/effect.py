@@ -54,6 +54,7 @@ class Effect:
         size = int(self._laneWidth / 4)
         alpha = 255 - int(effectSec * 250)
 
+        size = min(size, 50)
         textBox.Print(text, size, True, color, alpha)
 
         return False

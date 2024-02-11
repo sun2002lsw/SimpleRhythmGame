@@ -22,6 +22,10 @@ class music_manager:
         self._LoadSheet()
         self._LoadSheetChangeSound()
 
+    def ResetCurrentMusic(self):
+        self._curInstrumentIdx = 0
+        self._curSheetIdx = 0
+
     def GetCurrentMusic(self):
         return self._instrument[self._curInstrumentIdx], self._sheet[self._curSheetIdx]
 

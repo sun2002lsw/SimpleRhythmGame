@@ -45,6 +45,14 @@ class music_manager:
         self._instrument[self._curInstrumentIdx].PlayPitchSound("레")
         sleep(0.2)
         self._instrument[self._curInstrumentIdx].PlayPitchSound("미")
+
+    # 악기 취소에 따른 소리
+    def CancelInstrumentSound(self):
+        self._instrument[self._curInstrumentIdx].PlayPitchSound("미")
+        sleep(0.2)
+        self._instrument[self._curInstrumentIdx].PlayPitchSound("레")
+        sleep(0.2)
+        self._instrument[self._curInstrumentIdx].PlayPitchSound("도")
         
     # 악보 변경
     def ChangeSheet(self, idxChange):

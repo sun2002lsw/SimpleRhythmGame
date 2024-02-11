@@ -115,6 +115,8 @@ class Button:
         pygame.draw.rect(self._screen, backgroundColor, self._buttonRect)
         self._screen.blit(surface, textRect)
 
+        pygame.display.update(self._buttonRect)
+
     def _SetButtonSize(self, buttonSize):
         left = self._x - buttonSize
         top = self._y - buttonSize / 3

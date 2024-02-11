@@ -1,5 +1,6 @@
 import os
 import json
+from time import sleep
 from pygame import mixer
 from pathlib import Path
 
@@ -33,9 +34,18 @@ class music_manager:
         else:
             self._curInstrumentIdx += idxChange
 
+    # 악기 변경에 따른 소리
     def ChangeInstrumentSound(self):
         self._instrument[self._curInstrumentIdx].PlayPitchSound("도")
 
+    # 악기 선택에 따른 소리
+    def SelectInstrumentSound(self):
+        self._instrument[self._curInstrumentIdx].PlayPitchSound("도")
+        sleep(0.2)
+        self._instrument[self._curInstrumentIdx].PlayPitchSound("레")
+        sleep(0.2)
+        self._instrument[self._curInstrumentIdx].PlayPitchSound("미")
+        
     # 악보 변경
     def ChangeSheet(self, idxChange):
         if self._curSheetIdx + idxChange == len(self._sheet):

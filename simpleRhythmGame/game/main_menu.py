@@ -1,5 +1,5 @@
 import pygame.display
-import webbrowser
+from time import sleep
 
 import ui
 from .rhythm_game import *
@@ -19,63 +19,37 @@ class MainMenu:
 
         # 게임 한판 끝나면, 다시 메뉴로 돌아오면서 다시 시작
         while True:
-            self._Start()
+            self._instrumentSelected = False
+            self._gameModeSelected = False
+            self._sheetSelected = False
+            
+            self._start()
 
-    # 메인 메뉴의 시작. 기본 설정만 하고, run!
-    def _Start(self):
-        # 배경 설정
-        self._screen.fill("white")
-        pygame.display.update()
+    # 메인 메뉴에서 순서대로 선택을 진행
+    def _start(self):
+        self._ClearScreenWithTitle()
+        sleep(0.5)
 
-        # 타이틀 설정
-        self._CreateTitle()
+        if self._instrumentSelected is False:
+            self._startInstrumentSelection()
+            return
         
-        # 음악 텍스트 출력
-        self._CreateMusicText()
+        if self._gameModeSelected is False:
+            self._startGameModeSelection()
+            return
+            
+        if self._sheetSelected is False:
+            self._startSheetSelection()
+            return
 
-        # 버튼들 설정
-        self._buttons = []
-        self._CreateButton(self._width / 2, self._height * (4 / 8), "게임 하기", self._StartRhythmGame)
-        self._CreateButton(self._width / 2, self._height * (5 / 8), "음악 듣기", self._ListenRhythmGame)
-        self._CreateButton(self._width / 2, self._height * (6 / 8), "만든 사람", self._GitHubLink)
-        self._CreateButton(self._width / 2, self._height * (7 / 8), "나가기", etc.ExitGame)
+        self._startGame()
 
-        # 음악 관련 텍스트 박스 출력
-        self._PrintInstrumentName()
-        self._PrintSheetName()
+    # 흰 바탕에 제목만 그리기
+    def _ClearScreenWithTitle(self):
+        self._screen.fill("white")
 
-        self._Run()
-
-    # 실질적인 메뉴 진행. 여기서 게임 한판 종료까지 쭉 진행한다
-    def _Run(self):
-        while True:
-            mousePos = pygame.mouse.get_pos()
-            mousePressMove = pygame.mouse.get_pressed()
-            mouseLeftPressMove = mousePressMove[0]  # 마우스 누르고 움직일 때
-
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
-
-                if event.type == pygame.MOUSEBUTTONUP:
-                    if self._HandleButtonClick(mousePos):
-                        return  # 뭔가 행동 하나 진행. 처음부터 다시 시작하자
-                elif event.type == pygame.MOUSEBUTTONDOWN or mouseLeftPressMove:
-                    self._HandleButtonPressing(mousePos)
-                else:
-                    self._HandleButtonHovering(mousePos)
-
-                # 게임 키보드 입력 처리
-                if event.type == pygame.KEYDOWN:
-                    self._HandleKeyDown(event.key)
-
-            pygame.display.flip()
-
-    def _CreateTitle(self):
         x = self._width / 2
         y = self._height / 4
-        
         titleImg = pygame.image.load("./game/main_menu_title.png")
         titleImg = pygame.transform.scale(titleImg, (x, y))
 
@@ -85,89 +59,67 @@ class MainMenu:
         rect = rect.move((x, y))
 
         self._screen.blit(titleImg, rect)
+        pygame.display.flip()
 
-    def _CreateMusicText(self):
-        x = self._width / 4
+    # 악기 선택 과정
+    def _startInstrumentSelection(self):
+        x = self._width * (1 / 2)
+        y = self._height * (1 / 2)
+        guideBox = ui.TextBox(self._screen, x, y)
+        guideBox.Print("악기를 선택하세요", 50, True, "orange", 255)
+
+        x = self._width * (3 / 8)
         y = self._height * (5 / 8)
-        self._instrumentBox = ui.TextBox(self._screen, x, y)
+        leftArrowBox = ui.TextBox(self._screen, x, y)
+        leftArrowBox.Print("◀", 50, True, "black", 255)
 
-        x = self._width * (3 / 4)
-        self._sheetBox = ui.TextBox(self._screen, x, y)
+        x = self._width * (5 / 8)
+        y = self._height * (5 / 8)
+        rightArrowBox = ui.TextBox(self._screen, x, y)
+        rightArrowBox.Print("▶", 50, True, "black", 255)
 
-        self._PrintInstrumentName()
-        self._PrintSheetName()
+        x = self._width * (1 / 2)
+        y = self._height * (5 / 8)
+        instrumentBox = ui.TextBox(self._screen, x, y)
+        curInstrument, _ = self._musicManager.GetCurrentMusic()
+        instrumentBox.Print(curInstrument.Name, 50, True, "black", 255)
 
-    # 음악 관련 텍스트 출력
-    def _PrintInstrumentName(self):
-        instrument, _ = self._musicManager.GetCurrentMusic()
-        self._instrumentBox.Clear("white")
-        self._instrumentBox.Print(instrument.Name, 50, True, "black", 255)
+        # 키보드로 악기 선택하기
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    key = event.key
 
-    def _PrintSheetName(self):
-        _, sheet = self._musicManager.GetCurrentMusic()
-        self._sheetBox.Clear("white")
-        self._sheetBox.Print(sheet.Name, 50, True, "black", 255)
+                    # 나가기 버튼
+                    if key is pygame.K_ESCAPE:
+                        return
 
-    # 화살표 눌러서 음악 설정
-    def _HandleKeyDown(self, key):
-        if key == pygame.K_LEFT or key == pygame.K_RIGHT:
-            self._ChangeInstrument(key)
-        elif key == pygame.K_UP or key == pygame.K_DOWN:
-            self._ChangeSheet(key)
+                    # 악기 바꾸기 버튼
+                    if key == pygame.K_LEFT or key == pygame.K_RIGHT:
+                        instrumentBox.Clear("white")
 
-    def _ChangeInstrument(self, key):
-        idxChange = (key - pygame.K_RIGHT) * 2 - 1
-        idxChange = -idxChange  # 이렇게 하면 왼쪽은 -1, 오른쪽은 +1
+                        idxChange = (key - pygame.K_RIGHT) * 2 - 1
+                        idxChange = -idxChange  # 이렇게 하면 왼쪽은 -1, 오른쪽은 +1
+                        self._musicManager.ChangeInstrument(idxChange)
+                        self._musicManager.ChangeInstrumentSound()
 
-        self._musicManager.ChangeInstrument(idxChange)
-        self._PrintInstrumentName()
-        self._musicManager.ChangeInstrumentSound()
+                        curInstrument, _ = self._musicManager.GetCurrentMusic()
+                        instrumentBox.Print(curInstrument.Name, 50, True, "black", 255)
 
-    def _ChangeSheet(self, key):
-        idxChange = (key - pygame.K_DOWN) * 2 - 1
+                    # 악기 선택 버튼
+                    if key is pygame.K_RETURN:
+                        self._instrumentSelected = True
+                        self._musicManager.SelectInstrumentSound()
+                        return
 
-        self._musicManager.ChangeSheet(idxChange)
-        self._PrintSheetName()
-        self._musicManager.ChangeSheetSound()
-
-    # 버튼 추가
-    def _CreateButton(self, x, y, text, clickFunc):
-        button = ui.Button(self._screen, x, y, text, clickFunc)
-        self._buttons.append(button)
-
-    # 마우스를 버튼 위에 올렸을 때 처리
-    def _HandleButtonHovering(self, mousePos):
-        for button in self._buttons:
-            button.Hovering(mousePos)
-
-    # 마우스를 누른채 버튼 위에 올렸을 때 처리
-    def _HandleButtonPressing(self, mousePos):
-        for button in self._buttons:
-            button.Pressing(mousePos)
-
-    # 마우스를 클릭 했을 때 처리
-    def _HandleButtonClick(self, mousePos):
-        for button in self._buttons:
-            if button.Click(mousePos):
-                return True
-            
-        return False
+    # 게임 모드 선택 과정
+    def _startGameModeSelection(self):
+        pass
+    
+    # 악보 선택 과정
+    def _startSheetSelection(self):
+        pass
 
     # 게임 시작
-    def _StartRhythmGame(self):
-        self._rhythmGame(False)
-
-    # 자동 플레이 (음악 듣기)
-    def _ListenRhythmGame(self):
-        self._rhythmGame(True)
-
-    # 리듬 게임 시작
-    def _rhythmGame(self, autoPlay):
-        etc.ScreenBlackOut(self._screen)  # 화면 어두워지기
-        
-        instrument, sheet = self._musicManager.GetCurrentMusic()
-        RhythmGame(self._screen, instrument, sheet, autoPlay)
-
-    # 만든 사람 정보
-    def _GitHubLink(self):
-        webbrowser.open(r"https://github.com/sun2002lsw/SimpleRhythmGame")
+    def _startGame(self):
+        pass

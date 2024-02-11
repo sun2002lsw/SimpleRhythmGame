@@ -16,9 +16,12 @@ class TextBox:
         self._rect = surface.get_rect(center=self._center)
         self._screen.blit(surface, self._rect)
 
+        pygame.display.update(self._rect)
+
     # 해당 color 덮어버리기
     def Clear(self, color):
         if self._rect is None:
             return
 
         pygame.draw.rect(self._screen, color, self._rect)
+        pygame.display.update(self._rect)

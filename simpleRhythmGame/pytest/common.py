@@ -24,7 +24,7 @@ def checkOneJsonFile(path):
     with open(path, encoding='UTF8') as file:
         try:
             json.load(file)
-        except ValueError as e:
+        except ValueError:
             return os.path.basename(file.name)
 
     return ""
@@ -37,7 +37,7 @@ def checkDirJsonFiles(path):
         with open(jsonFilePath, encoding='UTF8') as file:
             try:
                 json.load(file)
-            except ValueError as e:
+            except ValueError:
                 return os.path.basename(file.name)
 
     return ""

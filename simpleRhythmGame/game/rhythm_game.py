@@ -103,6 +103,7 @@ class RhythmGame:
                 startPitch = self._sheet.GetStartPitchByCurrentSec(self._currentSec)
                 self._instrument.PlayPitchSound(startPitch)
 
+            # 게임 플레이 완료
             if self._finishGame or self._finishSec < self._currentSec:
                 etc.ScreenWhiteOut(self._screen)
                 return

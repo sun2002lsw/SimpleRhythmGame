@@ -7,9 +7,6 @@ from .manager.music_manager import *
 
 
 class MainMenu:
-    _TitleColors = ["chocolate1", "darkblue"]
-    _TitleChangeSec = 0.5
-
     def __init__(self, screen):
         self._screen = screen
 
@@ -73,38 +70,21 @@ class MainMenu:
                 if event.type == pygame.KEYDOWN:
                     self._HandleKeyDown(event.key)
 
-            # 타이틀은 계속 깜빡 깜빡
-            self._ChangeTitleColor()
-
             pygame.display.flip()
 
     def _CreateTitle(self):
         x = self._width / 2
         y = self._height / 4
+        
+        titleImg = pygame.image.load("./game/main_menu_title.png")
+        titleImg = pygame.transform.scale(titleImg, (x, y))
 
-        self._titleBox = ui.TextBox(self._screen, x, y)
-        self._lastTitleColorIdx = 0
-        self._lastTitleColorTick = pygame.time.get_ticks()
-        self._PrintTitle()
+        rect = titleImg.get_rect()
+        x -= titleImg.get_width() / 2
+        y -= titleImg.get_height() / 2
+        rect = rect.move((x, y))
 
-    # 제목을 반짝 반짝 꾸며줌
-    def _ChangeTitleColor(self):
-        currentTickTime = pygame.time.get_ticks()
-        elapsedSec = (currentTickTime - self._lastTitleColorTick) / 1000
-        if elapsedSec < self._TitleChangeSec:
-            return
-
-        self._lastTitleColorIdx += 1
-        if self._lastTitleColorIdx == self._TitleColors.__len__():
-            self._lastTitleColorIdx = 0
-        self._PrintTitle()
-
-        self._lastTitleColorTick = currentTickTime
-
-    def _PrintTitle(self):
-        color = self._TitleColors[self._lastTitleColorIdx]
-        self._titleBox.Clear("white")
-        self._titleBox.Print("예찬쌤의 리듬 게임", 100, True, color, 255)
+        self._screen.blit(titleImg, rect)
 
     def _CreateMusicText(self):
         x = self._width / 4

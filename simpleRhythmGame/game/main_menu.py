@@ -17,10 +17,11 @@ class MainMenu:
         # 필수 준비물 (악기, 악보)
         self._musicManager = music_manager()
 
-        # 게임 한판 끝나면, 다시 메뉴로 돌아오면서 처음부터 시작
+        # 게임 한판 끝나면 메뉴로 돌아와서 처음부터 시작
+        # 단, 악기 선택은 다시 하지 않음
+        self._instrumentSelected = False
         while True:
             self._musicManager.ResetCurrentMusic()
-            self._instrumentSelected = False
             self._gameModeSelected = False
             self._sheetSelected = False
             self._autoPlay = False

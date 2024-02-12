@@ -1,3 +1,5 @@
+import math
+
 import pygame
 import sys
 
@@ -163,7 +165,13 @@ class RhythmGame:
             startPos = (laneX, 0)
             endPos = (laneX, y)
 
-            pygame.draw.line(self._screen, "white", startPos, endPos, 1)
+            laneColor = "white"
+            laneWidth = 1
+            if self._laneCnt > 1 and i == math.ceil(self._laneCnt / 2):
+                laneColor = "red"
+                laneWidth = 3
+
+            pygame.draw.line(self._screen, laneColor, startPos, endPos, laneWidth)
 
         # 히트 라인
         startPos = (x, self._hitLineY)

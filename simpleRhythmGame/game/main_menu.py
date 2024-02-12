@@ -212,6 +212,7 @@ class MainMenu:
         # 악기와 악보 선택 완료
         self._gameModeSelected = True
         self._sheetSelected = True
+        self._autoPlay = False
                 
     # 음계 연습 (지정된 악보를 연주)
     def _PitchPractice(self):
@@ -224,10 +225,12 @@ class MainMenu:
 
         self._gameModeSelected = True
         self._sheetSelected = True
+        self._autoPlay = False
 
     # 악곡 연주 (따로 뭐 할거 없이 다음 단계 진행)
     def _PlayMusic(self):
         self._gameModeSelected = True
+        self._autoPlay = False
 
     # 악곡 감상 (autoPlay만 켜주고 다음 단계 진행)
     def _ListenMusic(self):

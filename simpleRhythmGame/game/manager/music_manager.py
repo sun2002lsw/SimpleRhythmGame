@@ -1,3 +1,4 @@
+import copy
 import os
 import json
 from time import sleep
@@ -12,6 +13,7 @@ class music_manager:
     def __init__(self):
         self._instrument = list()
         self._sheet = list()
+        self._beatPracticePitch = list()
         self._sheetChangeSound = None
 
         self._curInstrumentIdx = 0
@@ -21,6 +23,8 @@ class music_manager:
         self._LoadInstrumentSound()
         self._LoadSheet()
         self._LoadSheetChangeSound()
+
+        self._CreateBeatPracticeInstrument()
 
     def ResetCurrentMusic(self):
         self._curInstrumentIdx = 0
@@ -111,7 +115,7 @@ class music_manager:
             for sound in os.listdir(instrumentPitchPath):
                 pitch = Path(sound).stem
                 path = os.path.join(instrumentPitchPath, sound)
-                targetInstrument.SetPitchSound(pitch, path)
+                targetInstrument.SetPitchSoundByPath(pitch, path)
 
     # 각 악보 추출
     def _LoadSheet(self):
@@ -130,6 +134,13 @@ class music_manager:
 
             self._sheet.append(sheet)
 
+            # beatPractice 악보에 대한 특별처리
+            if sheetName == "beatPractice":
+                for data in sheetData["악보"]:
+                    pitch = data["계이름"]
+                    self._beatPracticePitch.append(pitch)
+
+    # 악보 변경 소리
     def _LoadSheetChangeSound(self):
         with open("config.json") as file:
             config = json.load(file)
@@ -137,3 +148,26 @@ class music_manager:
 
         self._sheetChangeSound = mixer.Sound(changeSoundPath)
         self._sheetChangeSound.set_volume(0.2)
+
+    # 각 악기들에 대하여 박자 연습 전용 악기를 만들어준다
+    def _CreateBeatPracticeInstrument(self):
+        pitchLaneData = dict()
+        for pitch in self._beatPracticePitch:
+            if pitch != "쉼표":
+                pitchLaneData[pitch] = [0]  # 박자연습은 항상 0번 레인만 사용
+
+        beatInstruments = list()
+        for instrument in self._instrument:
+            beatInstrumentName = instrument.Name + " - beatPractice"
+            beatInstrument = Instrument(beatInstrumentName)
+            beatInstrument.SetPitchLane(pitchLaneData)
+
+            # 어떤 박자를 연주하건 소리는 중요하지 않다
+            sound = instrument.GetAnyPitchSound()
+            for pitch in self._beatPracticePitch:
+                beatInstrument.SetPitchSoundByObject(pitch, sound)
+
+            beatInstruments.append(beatInstrument)
+
+        # 새롭게 제작된 박자 연습 전용 악기들을 추가
+        self._instrument.extend(beatInstruments)

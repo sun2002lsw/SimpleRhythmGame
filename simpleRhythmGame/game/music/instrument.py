@@ -25,8 +25,11 @@ class Instrument:
 
         self._SetLaneCnt()
 
-    def SetPitchSound(self, pitch, soundPath):
+    def SetPitchSoundByPath(self, pitch, soundPath):
         sound = mixer.Sound(soundPath)
+        self._soundByPitch[pitch] = sound
+
+    def SetPitchSoundByObject(self, pitch, sound):
         self._soundByPitch[pitch] = sound
 
     def _SetLaneCnt(self):
@@ -80,3 +83,8 @@ class Instrument:
         sound = self._soundByPitch[pitch]
         mixer.Sound.play(sound)
         self._lastPlayedSound = sound
+
+    # 그냥 아무거나 음계 소리 하나 반환
+    def GetAnyPitchSound(self):
+        for value in self._soundByPitch.values():
+            return value

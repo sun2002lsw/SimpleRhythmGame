@@ -117,8 +117,6 @@ class MainMenu:
 
                     # 화살표: 악기 바꾸기
                     if key == pygame.K_LEFT or key == pygame.K_RIGHT:
-                        self._musicManager.ChangeInstrumentSound()
-
                         idxChange = (key - pygame.K_RIGHT) * 2 - 1
                         idxChange = -idxChange  # 이렇게 하면 왼쪽은 -1, 오른쪽은 +1
 
@@ -128,6 +126,7 @@ class MainMenu:
 
                             curInstrument, _ = self._musicManager.GetCurrentMusic()
                             if "beatPractice" not in curInstrument.Name:
+                                self._musicManager.ChangeInstrumentSound()
                                 break
 
                         instrumentBox.Clear("white")

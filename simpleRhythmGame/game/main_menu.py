@@ -21,7 +21,6 @@ class MainMenu:
         # 단, 악기 선택은 다시 하지 않음
         self._instrumentSelected = False
         while True:
-            self._musicManager.ResetCurrentMusic()
             self._gameModeSelected = False
             self._sheetSelected = False
             self._autoPlay = False
@@ -51,9 +50,10 @@ class MainMenu:
 
             # 모든 선택이 완료됨
             break
-        
+
         # 게임 시작
-        self._StartGame()
+        instrument, sheet = self._musicManager.GetCurrentMusic()
+        self._StartGame(instrument, sheet)
 
     # 흰 바탕에 제목만 그리기
     def _ClearScreenWithTitle(self):
@@ -76,11 +76,10 @@ class MainMenu:
     def _StartInstrumentSelection(self):
         # 일단 beatPractice가 아닌 악기를 선택해서 시작
         while True:
-            self._musicManager.ChangeInstrument(1)
-
             curInstrument, _ = self._musicManager.GetCurrentMusic()
             if "beatPractice" not in curInstrument.Name:
                 break
+            self._musicManager.ChangeInstrument(1)
 
         # 메뉴 그리기
         x = self._width * (1 / 2)
@@ -194,25 +193,15 @@ class MainMenu:
 
         return False
 
-    # 박자 연습 (지정된 악기와 악보를 연주)
+    # 박자 연습 (지정된 악기와 악보를 그냥 연주)
     def _BeatPractice(self):
-        curInstrument, curSheet = self._musicManager.GetCurrentMusic()
+        curInstrument, _ = self._musicManager.GetCurrentMusic()
         beatInstrumentName = curInstrument.Name + " - beatPractice"
 
-        # 지정된 악기를 찾기
-        while curInstrument.Name != beatInstrumentName:
-            self._musicManager.ChangeInstrument(1)
-            curInstrument, _ = self._musicManager.GetCurrentMusic()
-            
-        # 지정된 악보를 찾기
-        while curSheet.Name != "beatPractice":
-            self._musicManager.ChangeSheet(1)
-            _, curSheet = self._musicManager.GetCurrentMusic()
+        beatInstrument = self._musicManager.GetInstrumentByName(beatInstrumentName)
+        beatSheet = self._musicManager.GetInstrumentFirstSheet(beatInstrumentName)
 
-        # 악기와 악보 선택 완료
-        self._gameModeSelected = True
-        self._sheetSelected = True
-        self._autoPlay = False
+        self._StartGame(beatInstrument, beatSheet)
                 
     # 음계 연습 (지정된 악보를 연주)
     def _PitchPractice(self):
@@ -225,14 +214,12 @@ class MainMenu:
 
         self._gameModeSelected = True
         self._sheetSelected = True
-        self._autoPlay = False
 
     # 악곡 연주 (따로 뭐 할거 없이 다음 단계 진행)
     def _PlayMusic(self):
         self._gameModeSelected = True
-        self._autoPlay = False
 
-    # 악곡 감상 (autoPlay만 켜주고 다음 단계 진행)
+    # 악곡 감상 (autoPlay 켜주고 다음 단계 진행)
     def _ListenMusic(self):
         self._gameModeSelected = True
         self._autoPlay = True
@@ -241,11 +228,10 @@ class MainMenu:
     def _StartSheetSelection(self):
         # 일단 Practice가 아닌 악보를 선택해서 시작
         while True:
-            self._musicManager.ChangeSheet(1)
-
             _, curSheet = self._musicManager.GetCurrentMusic()
             if "Practice" not in curSheet.Name:
                 break
+            self._musicManager.ChangeSheet(1)
                 
         # 메뉴 그리기
         x = self._width * (1 / 2)
@@ -277,6 +263,7 @@ class MainMenu:
 
                     # esc: 뒤로 가기
                     if key is pygame.K_ESCAPE:
+                        self._autoPlay = False
                         self._gameModeSelected = False
                         self._musicManager.CancelInstrumentSound()
                         return
@@ -306,8 +293,6 @@ class MainMenu:
                         return
 
     # 게임 시작
-    def _StartGame(self):
+    def _StartGame(self, instrument, sheet):
         etc.ScreenBlackOut(self._screen)  # 화면 어두워지기
-
-        instrument, sheet = self._musicManager.GetCurrentMusic()
         RhythmGame(self._screen, instrument, sheet, self._autoPlay)

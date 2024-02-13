@@ -3,8 +3,8 @@
   "buttonHoverSound" : "data/interface/buttonHover.wav",
   "buttonPressSound" : "data/interface/buttonPress.wav",
   "buttonClickSound" : "data/interface/buttonClick.mp3",
-  
-  "musicInstrumentSoundPath" : "data/music/sound/",
+
   "musicInstrumentPath" : "data/music/instrument/",
+  "musicSoundPath" : "data/music/sound/",
   "musicSheetPath" : "data/music/sheet/"
 }

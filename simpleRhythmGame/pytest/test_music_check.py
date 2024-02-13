@@ -14,9 +14,11 @@ def test_music_json_validation():
     assert len(invalidJsonFilePath) == 0, failMsg
 
     sheetPath = getAbsPath(config["musicSheetPath"])
-    invalidJsonFilePath = getInvalidJsonFilePath(sheetPath)
-    failMsg = "{0} file is invalid json file".format(invalidJsonFilePath)
-    assert len(invalidJsonFilePath) == 0, failMsg
+    for instrumentName in os.listdir(sheetPath):
+        instrumentSheetPath = os.path.join(sheetPath, instrumentName)
+        invalidJsonFilePath = getInvalidJsonFilePath(instrumentSheetPath)
+        failMsg = "{0} file is invalid json file".format(invalidJsonFilePath)
+        assert len(invalidJsonFilePath) == 0, failMsg
 
 
 @pytest.mark.order(4)
@@ -26,6 +28,7 @@ def test_instrument_validation():
     config = getConfig()
     instrumentPath = getAbsPath(config["musicInstrumentPath"])
 
+    # 특정 악기에 대하여
     for instrumentJson in os.listdir(instrumentPath):
         instrumentName = Path(instrumentJson).stem
         instrumentJsonPath = os.path.join(instrumentPath, instrumentJson)
@@ -55,7 +58,7 @@ def test_instrument_validation():
 def test_instrument_sound():
     config = getConfig()
     instrumentPath = getAbsPath(config["musicInstrumentPath"])
-    instrumentSoundPath = getAbsPath(config["musicInstrumentSoundPath"])
+    soundPath = getAbsPath(config["musicSoundPath"])
 
     # 특정 악기에 대하여
     for instrumentJson in os.listdir(instrumentPath):
@@ -68,13 +71,47 @@ def test_instrument_sound():
             pitchList = pitchLaneData.keys()
 
         # 해당 악기의 음악 폴더에서 음악 파일 목록도 가져와서
-        instrumentSoundFilePath = os.path.join(instrumentSoundPath, instrumentName)
-        fileList = os.listdir(instrumentSoundFilePath)
-        fileNameList = [Path(file).stem for file in fileList]
+        instrumentSoundPath = os.path.join(soundPath, instrumentName)
+        failMsg = "{0} instrument sound file does not exist".format(instrumentName)
+        assert os.path.exists(instrumentSoundPath), failMsg
+
+        soundList = os.listdir(instrumentSoundPath)
+        fileNameList = [Path(file).stem for file in soundList]
         fileNameDict = {fileName: 0 for fileName in fileNameList}
 
         # 계이름과 같은 이름의 파일이 있는지 확인
         for pitch in pitchList:
-            failMsg = ("{0} instrument - {1} pitch sound file not exist"
+            failMsg = ("{0} instrument - {1} pitch sound file does not exist"
                        .format(instrumentName, pitch))
             assert pitch in fileNameDict, failMsg
+
+        # 기본적으로 필요한 필수 소리 파일
+        for pitch in ["1", "2", "3"]:
+            failMsg = "{0} instrument - default sound file does not exist".format(instrumentName)
+            assert pitch in fileNameDict, failMsg
+
+
+@pytest.mark.order(6)
+# 각 악기에 대하여 자기만의 악보가 있어야 함
+def test_instrument_sheet():
+    config = getConfig()
+    instrumentPath = getAbsPath(config["musicInstrumentPath"])
+    sheetPath = getAbsPath(config["musicSheetPath"])
+
+    # 특정 악기에 대하여
+    for instrumentJson in os.listdir(instrumentPath):
+        instrumentName = Path(instrumentJson).stem
+        instrumentSheetPath = os.path.join(sheetPath, instrumentName)
+
+        sheetList = os.listdir(instrumentSheetPath)
+        fileNameList = [Path(file).stem for file in sheetList]
+        fileNameDict = {fileName: 0 for fileName in fileNameList}
+
+        # 기본적으로 필요한 필수 악보 파일
+        for sheet in ["beatPractice", "pitchPractice"]:
+            failMsg = "{0} instrument - default sheet file does not exist".format(instrumentName)
+            assert sheet in fileNameDict, failMsg
+
+        # 기본 파일을 제외하고 최소 1개의 파일은 있어야 함
+        failMsg = "{0} instrument - need more sheet file".format(instrumentName)
+        assert len(fileNameList) > 2, failMsg

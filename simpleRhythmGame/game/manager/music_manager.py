@@ -12,7 +12,7 @@ from ..music.instrument import Instrument
 class music_manager:
     def __init__(self):
         self._instrument = list()
-        self._sheet = list()
+        self._sheetByInstrument = dict(list())
         self._beatPracticePitch = list()
         self._sheetChangeSound = None
 
@@ -31,7 +31,10 @@ class music_manager:
         self._curSheetIdx = 0
 
     def GetCurrentMusic(self):
-        return self._instrument[self._curInstrumentIdx], self._sheet[self._curSheetIdx]
+        instrument = self._instrument[self._curInstrumentIdx]
+        sheet = self._sheetByInstrument[instrument.Name][self._curSheetIdx]
+
+        return instrument, sheet
 
     # 악기 변경
     def ChangeInstrument(self, idxChange):
@@ -64,10 +67,13 @@ class music_manager:
         
     # 악보 변경
     def ChangeSheet(self, idxChange):
-        if self._curSheetIdx + idxChange == len(self._sheet):
+        instrument = self._instrument[self._curInstrumentIdx]
+        sheetLen = len(self._sheetByInstrument[instrument.Name])
+
+        if self._curSheetIdx + idxChange == sheetLen:
             self._curSheetIdx = 0
         elif self._curSheetIdx + idxChange == -1:
-            self._curSheetIdx = len(self._sheet) - 1
+            self._curSheetIdx = sheetLen - 1
         else:
             self._curSheetIdx += idxChange
 
@@ -95,11 +101,11 @@ class music_manager:
     def _LoadInstrumentSound(self):
         with open("config.json") as file:
             config = json.load(file)
-            instrumentSoundPath = os.path.join(os.getcwd(), config["musicInstrumentSoundPath"])
+            soundPath = os.path.join(os.getcwd(), config["musicSoundPath"])
 
         # 각 악기 이름 폴더에 대하여
-        for instrumentName in os.listdir(instrumentSoundPath):
-            instrumentPitchPath = os.path.join(instrumentSoundPath, instrumentName)
+        for instrumentName in os.listdir(soundPath):
+            instrumentPitchPath = os.path.join(soundPath, instrumentName)
 
             # 해당하는 악기를 찾고
             targetInstrument = None
@@ -117,28 +123,33 @@ class music_manager:
                 path = os.path.join(instrumentPitchPath, sound)
                 targetInstrument.SetPitchSoundByPath(pitch, path)
 
-    # 각 악보 추출
+    # 각 악기별 연주 가능한 악보 추출
     def _LoadSheet(self):
         with open("config.json") as file:
             config = json.load(file)
             sheetPath = os.path.join(os.getcwd(), config["musicSheetPath"])
 
-        for sheetJson in os.listdir(sheetPath):
-            sheetName = Path(sheetJson).stem
-            sheetJsonPath = os.path.join(sheetPath, sheetJson)
+        # 각 악기 이름 폴더에 대하여
+        for instrumentName in os.listdir(sheetPath):
+            instrumentSheetPath = os.path.join(sheetPath, instrumentName)
 
-            sheet = Sheet(sheetName)
-            with open(sheetJsonPath, encoding='UTF8') as file:
-                sheetData = json.load(file)
-                sheet.MakeSheet(sheetData)
+            # 해당 폴더의 모든 악보를 추출
+            for sheetJson in os.listdir(instrumentSheetPath):
+                sheetName = Path(sheetJson).stem
+                sheetJsonPath = os.path.join(sheetPath, sheetJson)
 
-            self._sheet.append(sheet)
+                sheet = Sheet(sheetName)
+                with open(sheetJsonPath, encoding='UTF8') as file:
+                    sheetData = json.load(file)
+                    sheet.MakeSheet(sheetData)
 
-            # beatPractice 악보에 대한 특별처리
-            if sheetName == "beatPractice":
-                for data in sheetData["악보"]:
-                    pitch = data["계이름"]
-                    self._beatPracticePitch.append(pitch)
+                self._sheetByInstrument[instrumentName].append(sheet)
+
+                # beatPractice 악보에 대한 특별처리
+                if sheetName == "beatPractice":
+                    for data in sheetData["악보"]:
+                        pitch = data["계이름"]
+                        self._beatPracticePitch.append(pitch)
 
     # 악보 변경 소리
     def _LoadSheetChangeSound(self):

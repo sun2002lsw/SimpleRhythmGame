@@ -16,3 +16,6 @@ echo.
 :: for git ide
 git fetch --all
 echo.
+
+:: pause for debugging
+pause

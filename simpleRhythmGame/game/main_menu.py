@@ -253,12 +253,12 @@ class MainMenu:
         guideBox = ui.TextBox(self._screen, x, y)
         guideBox.Print("악보를 선택하세요", 50, True, "orange", 255)
 
-        x = self._width * (3 / 8)
+        x = self._width * (1 / 4)
         y = self._height * (5 / 8)
         leftArrowBox = ui.TextBox(self._screen, x, y)
         leftArrowBox.Print("◀", 50, True, "black", 255)
 
-        x = self._width * (5 / 8)
+        x = self._width * (3 / 4)
         y = self._height * (5 / 8)
         rightArrowBox = ui.TextBox(self._screen, x, y)
         rightArrowBox.Print("▶", 50, True, "black", 255)

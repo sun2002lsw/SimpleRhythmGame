@@ -109,10 +109,10 @@ class MainMenu:
                 if event.type == pygame.KEYDOWN:
                     key = event.key
 
-                    # esc: 뒤로 가기
+                    # esc: 게임 종료
                     if key is pygame.K_ESCAPE:
-                        self._musicManager.CancelInstrumentSound()
-                        return
+                        pygame.quit()
+                        sys.exit()
 
                     # 화살표: 악기 바꾸기
                     if key == pygame.K_LEFT or key == pygame.K_RIGHT:

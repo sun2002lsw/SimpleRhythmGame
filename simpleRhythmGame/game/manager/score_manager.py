@@ -50,13 +50,13 @@ class ScoreManager:
         self._comboTick = pygame.time.get_ticks()
 
     def _AddMissPitch(self, pitch):
-        if pitch == "":
+        if pitch == "" or pitch == "쉼표":
             return
 
         self._missCntByPitch[pitch] += 1
 
     def _AddHitPitch(self, pitch):
-        if pitch == "":
+        if pitch == "" or pitch == "쉼표":
             return
         if self._lastHitPitch == pitch:
             return  # miss는 딱 한번이지만 hit는 막대기 녹이면서 중복 발생함
@@ -118,7 +118,7 @@ class ScoreManager:
         # 최고의 플레이
         x = self._width * (1 / 3)
         y = self._height * (1 / 2)
-        TextBox(self._screen, x, y).Print("개쩌는 플레이", 50, True, "blue", 255)
+        TextBox(self._screen, x, y).Print("많이 성공한 계이름", 50, True, "blue", 255)
 
         yOffset = self._height / 16
         y += yOffset
@@ -130,13 +130,13 @@ class ScoreManager:
             pitch = pitchInfo[0]
             accuracy = pitchInfo[1][2]
 
-            resultStr = "{}. {}({:.1f})".format(rank, pitch, accuracy)
+            resultStr = "{}. {}({:.1f}%)".format(rank, pitch, accuracy)
             TextBox(self._screen, x, nextY).Print(resultStr, 30, True, "white", 255)
 
         # 최악의 플레이
         x = self._width * (2 / 3)
         y = self._height * (1 / 2)
-        TextBox(self._screen, x, y).Print("개좆망 플레이", 50, True, "red", 255)
+        TextBox(self._screen, x, y).Print("노력이 필요한 계이름", 50, True, "red", 255)
 
         yOffset = self._height / 16
         y += yOffset
@@ -148,7 +148,7 @@ class ScoreManager:
             pitch = pitchInfo[0]
             accuracy = pitchInfo[1][2]
 
-            resultStr = "{}. {}({:.1f})".format(rank, pitch, accuracy)
+            resultStr = "{}. {}({:.1f}%)".format(rank, pitch, accuracy)
             TextBox(self._screen, x, nextY).Print(resultStr, 30, True, "white", 255)
 
 

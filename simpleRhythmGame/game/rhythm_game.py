@@ -75,12 +75,14 @@ class RhythmGame:
     def _Run(self):
         while True:
             self._currentSec = (pygame.time.get_ticks() - self._gameStartTick) / 1000
+            pitch = self._sheet.GetPitchByCurrentSec(self._currentSec)
 
             for laneManager in self._laneManagers.values():
                 laneManager.CheckMiss(self._currentSec)
                 laneManager.ProcessMelting(self._currentSec)
                 comboState = laneManager.GetComboState()
-                self._scoreManager.AddComboState(comboState)
+
+                self._scoreManager.AddComboState(comboState, pitch)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -107,8 +109,18 @@ class RhythmGame:
 
             # 게임 플레이 완료
             if self._finishGame or self._finishSec < self._currentSec:
-                etc.ScreenWhiteOut(self._screen)
-                return
+                etc.ScreenBlackOut(self._screen)
+                break
+
+        # 플레이 종료에 따른 점수 표기
+        self._scoreManager.DrawResult()
+
+        # 아무 키나 누를 때까지 대기
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    etc.ScreenWhiteOut(self._screen)
+                    return
 
     # 키 입력 처리
     def _HandleKeyDown(self, key):

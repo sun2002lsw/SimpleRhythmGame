@@ -1,5 +1,6 @@
 import pygame
 from enum import Enum, auto
+from collections import defaultdict
 
 from ui import TextBox
 
@@ -7,6 +8,8 @@ from ui import TextBox
 class ScoreManager:
     def __init__(self, screen, width, height):
         self._screen = screen
+        self._width = width
+        self._height = height
 
         comboX = width / 2
         comboY = height / 3
@@ -22,21 +25,44 @@ class ScoreManager:
         self._comboTick = 0
         self._score = 0
 
-    def AddComboState(self, comboState):
+        self._lastHitPitch = None
+        self._hitCntByPitch = defaultdict(int)
+        self._missCntByPitch = defaultdict(int)
+
+    def AddComboState(self, comboState, pitch):
         if comboState == comboState.NoChange:
             return
 
+        # miss
         if comboState == ComboState.Miss:
+            self._AddMissPitch(pitch)
             self._combo = 0
             return
 
-        # combo hit
+        # hit
+        self._AddHitPitch(pitch)
+
         self._combo += 1
         self._score += self._combo
-        self._comboTick = pygame.time.get_ticks()
-
         if comboState == ComboState.Perfect:
             self._score += self._combo
+
+        self._comboTick = pygame.time.get_ticks()
+
+    def _AddMissPitch(self, pitch):
+        if pitch == "":
+            return
+
+        self._missCntByPitch[pitch] += 1
+
+    def _AddHitPitch(self, pitch):
+        if pitch == "":
+            return
+        if self._lastHitPitch == pitch:
+            return  # miss는 딱 한번이지만 hit는 막대기 녹이면서 중복 발생함
+
+        self._lastHitPitch = pitch
+        self._hitCntByPitch[pitch] += 1
 
     def Draw(self):
         self._DrawCombo()
@@ -53,6 +79,77 @@ class ScoreManager:
     def _DrawScore(self):
         self._scoreStrBox.Print("SCORE", 50, True, "white", 255)
         self._scoreDrawBox.Print(str(self._score), 50, True, "white", 255)
+
+    def DrawResult(self):
+        hitKeys = self._hitCntByPitch.keys()
+        missKeys = self._missCntByPitch.keys()
+        allKeys = set(hitKeys) | set(missKeys)
+        pitchCnt = len(allKeys)
+
+        resultByPitch = dict()
+        for key in allKeys:
+            hitCnt = self._hitCntByPitch[key]
+            missCnt = self._missCntByPitch[key]
+            totalCnt = hitCnt + missCnt
+            accuracy = hitCnt / totalCnt * 100
+
+            resultByPitch[key] = (hitCnt, totalCnt, accuracy)
+
+        # 정확도순으로 정렬. 똑같으면 히트수 정렬. 똑같으면 이름수 정렬
+        sortedByName = sorted(resultByPitch.items(), key=lambda items: items[1][0], reverse=True)
+        sortedByTotalCnt = sorted(sortedByName, key=lambda items: items[1][1], reverse=True)
+        sortedByAccuracy = sorted(sortedByTotalCnt, key=lambda items: items[1][2], reverse=True)
+
+        # 음표별 결과 쓰기
+        widthOffset = self._width / (pitchCnt + 1)
+        y = self._height * (1 / 8)
+        yOffset = self._height / 16
+
+        for i, pitchInfo in enumerate(sortedByAccuracy):
+            x = (i + 1) * widthOffset
+            pitchStr = pitchInfo[0]
+            hitCnt = pitchInfo[1][0]
+            totlaCnt = pitchInfo[1][1]
+            resultStr = str(hitCnt) + "/" + str(totlaCnt)
+
+            TextBox(self._screen, x, y).Print(pitchStr, 30, True, "yellow", 255)
+            TextBox(self._screen, x, y + yOffset).Print(resultStr, 30, True, "white", 255)
+
+        # 최고의 플레이
+        x = self._width * (1 / 3)
+        y = self._height * (1 / 2)
+        TextBox(self._screen, x, y).Print("개쩌는 플레이", 50, True, "blue", 255)
+
+        yOffset = self._height / 16
+        y += yOffset
+        for i in range(3):
+            rank = i + 1
+            nextY = y + rank * yOffset
+
+            pitchInfo = sortedByAccuracy[i]
+            pitch = pitchInfo[0]
+            accuracy = pitchInfo[1][2]
+
+            resultStr = "{}. {}({:.1f})".format(rank, pitch, accuracy)
+            TextBox(self._screen, x, nextY).Print(resultStr, 30, True, "white", 255)
+
+        # 최악의 플레이
+        x = self._width * (2 / 3)
+        y = self._height * (1 / 2)
+        TextBox(self._screen, x, y).Print("개좆망 플레이", 50, True, "red", 255)
+
+        yOffset = self._height / 16
+        y += yOffset
+        for i in range(3):
+            rank = i + 1
+            nextY = y + rank * yOffset
+
+            pitchInfo = sortedByAccuracy[-rank]
+            pitch = pitchInfo[0]
+            accuracy = pitchInfo[1][2]
+
+            resultStr = "{}. {}({:.1f})".format(rank, pitch, accuracy)
+            TextBox(self._screen, x, nextY).Print(resultStr, 30, True, "white", 255)
 
 
 class ComboState(Enum):

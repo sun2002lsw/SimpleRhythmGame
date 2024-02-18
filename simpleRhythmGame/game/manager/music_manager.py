@@ -39,6 +39,8 @@ class music_manager:
 
     # 악기 변경
     def ChangeInstrument(self, idxChange):
+        self._curSheetIdx = 0
+
         if self._curInstrumentIdx + idxChange == len(self._instrument):
             self._curInstrumentIdx = 0
         elif self._curInstrumentIdx + idxChange == -1:

@@ -30,6 +30,10 @@ def test_instrument_validation():
 
     # 특정 악기에 대하여
     for instrumentJson in os.listdir(instrumentPath):
+        ext = os.path.splitext(instrumentJson)[-1].lower()
+        if ext != ".json":
+            continue
+
         instrumentName = Path(instrumentJson).stem
         instrumentJsonPath = os.path.join(instrumentPath, instrumentJson)
 
@@ -62,6 +66,10 @@ def test_instrument_sound():
 
     # 특정 악기에 대하여
     for instrumentJson in os.listdir(instrumentPath):
+        ext = os.path.splitext(instrumentJson)[-1].lower()
+        if ext != ".json":
+            continue
+
         instrumentName = Path(instrumentJson).stem
         instrumentJsonPath = os.path.join(instrumentPath, instrumentJson)
 
@@ -100,6 +108,10 @@ def test_instrument_sheet():
 
     # 특정 악기에 대하여
     for instrumentJson in os.listdir(instrumentPath):
+        ext = os.path.splitext(instrumentJson)[-1].lower()
+        if ext != ".json":
+            continue
+
         instrumentName = Path(instrumentJson).stem
         instrumentSheetPath = os.path.join(sheetPath, instrumentName)
 

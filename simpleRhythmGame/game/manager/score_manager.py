@@ -118,7 +118,7 @@ class ScoreManager:
         # 최고의 플레이
         x = self._width * (1 / 3)
         y = self._height * (1 / 2)
-        TextBox(self._screen, x, y).Print("많이 성공한 계이름", 50, True, "blue", 255)
+        TextBox(self._screen, x, y).Print("많이 성공한 계이름", 50, True, "aqua", 255)
 
         yOffset = self._height / 16
         y += yOffset

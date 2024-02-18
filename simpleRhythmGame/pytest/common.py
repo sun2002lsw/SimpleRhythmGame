@@ -33,6 +33,9 @@ def checkOneJsonFile(path):
 def checkDirJsonFiles(path):
     for jsonFile in os.listdir(path):
         jsonFilePath = os.path.join(path, jsonFile)
+        ext = os.path.splitext(jsonFilePath)[-1].lower()
+        if ext != ".json":
+            continue
 
         with open(jsonFilePath, encoding='UTF8') as file:
             try:

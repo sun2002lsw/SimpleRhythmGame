@@ -1,6 +1,6 @@
-import copy
 import os
 import json
+import pygame
 from time import sleep
 from pygame import mixer
 from pathlib import Path
@@ -20,6 +20,7 @@ class music_manager:
 
         self._LoadInstrumentPitch()
         self._LoadInstrumentSound()
+        self._LoadInstrumentImage()
         self._LoadSheet()
         self._LoadSheetChangeSound()
 
@@ -90,6 +91,10 @@ class music_manager:
 
         instrumentPath = os.path.join(os.getcwd(), config["musicInstrumentPath"])
         for instrumentJson in os.listdir(instrumentPath):
+            ext = os.path.splitext(instrumentJson)[-1].lower()
+            if ext != ".json":
+                continue
+
             instrumentName = Path(instrumentJson).stem
             instrumentJsonPath = os.path.join(instrumentPath, instrumentJson)
 
@@ -139,6 +144,25 @@ class music_manager:
 
             anySound = targetInstrument.GetAnyPitchSound()
             beatInstrument.SetPitchSoundByObject("notUsed", anySound)
+
+    # 각 악기별 그림 추출
+    def _LoadInstrumentImage(self):
+        with open("config.json") as file:
+            config = json.load(file)
+
+        instrumentPath = os.path.join(os.getcwd(), config["musicInstrumentPath"])
+        for instrumentImage in os.listdir(instrumentPath):
+            ext = os.path.splitext(instrumentImage)[-1].lower()
+            if ext != ".png":
+                continue
+
+            instrumentName = Path(instrumentImage).stem
+            instrumentImagePath = os.path.join(instrumentPath, instrumentImage)
+
+            instrumentImage = pygame.image.load(instrumentImagePath)
+            for instrument in self._instrument:
+                if instrument.Name == instrumentName:
+                    instrument.SetImage(instrumentImage)
 
     # 각 악기별 연주 가능한 악보 추출
     def _LoadSheet(self):

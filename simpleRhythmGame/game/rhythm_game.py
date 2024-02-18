@@ -24,9 +24,21 @@ class RhythmGame:
         self._screenWidth = width
         self._screenHeight = height
         
+        # 게임 틀 관련 설정
         self._frameLeftX = self._screenWidth / 3  # 게임 화면은 전체 화면의 1/3로 고정
         self._hitLineY = height * HitLinePos / 100  # 히트 라인도 특정 위치 고정
 
+        # 악기 그림 관련 설정 (그림이 없을 수도 있음)
+        image = self._instrument.GetImage()
+        if image is not None:
+            size = (self._screenWidth / 2, height * (100 - HitLinePos) / 100)
+            self._instrumentImage = pygame.transform.scale(image, size)
+            rect = self._instrumentImage.get_rect()
+            self._instrumentImageRect = rect.move(self._screenWidth / 4, self._hitLineY)
+        else:
+            self._instrumentImage = None
+
+        # 게임 시작
         self._Start()
 
     # 기본 값들을 설정하고 게임 시작
@@ -160,6 +172,7 @@ class RhythmGame:
             laneManager.Draw(self._currentSec)
 
         self._DrawFrame()
+        self._DrawInstrumentImage()
         self._PrintText()
         self._scoreManager.Draw()
 
@@ -193,6 +206,13 @@ class RhythmGame:
         # 게임 테두리
         pygame.draw.line(self._screen, "white", (x, 0), (x, y), 5)
         pygame.draw.line(self._screen, "white", (2 * x, 0), (2 * x, y), 5)
+
+    # 악기 그림 그리기
+    def _DrawInstrumentImage(self):
+        if self._instrumentImage is None:
+            return
+
+        self._screen.blit(self._instrumentImage, self._instrumentImageRect)
 
     # 각종 텍스트 출력하기
     def _PrintText(self):

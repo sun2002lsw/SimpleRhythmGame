@@ -11,6 +11,7 @@ class Instrument:
         self._soundByPitch = dict()
         self._pressingLanes = dict()
         self._lastPlayedSound = None
+        self._image = None
 
     # 새롭게 게임 시작될 때 초기화
     def Ready(self):
@@ -88,3 +89,9 @@ class Instrument:
     def GetAnyPitchSound(self):
         for value in self._soundByPitch.values():
             return value
+
+    def SetImage(self, image):
+        self._image = image
+
+    def GetImage(self):
+        return self._image

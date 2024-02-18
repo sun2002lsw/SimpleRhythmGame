@@ -25,7 +25,7 @@ class ScoreManager:
         self._comboTick = 0
         self._score = 0
 
-        self._lastHitPitch = None
+        self._lastPitch = None
         self._hitCntByPitch = defaultdict(int)
         self._missCntByPitch = defaultdict(int)
 
@@ -50,18 +50,21 @@ class ScoreManager:
         self._comboTick = pygame.time.get_ticks()
 
     def _AddMissPitch(self, pitch):
+        if self._lastPitch == pitch:
+            return
         if pitch == "" or pitch == "쉼표":
             return
 
+        self._lastPitch = pitch
         self._missCntByPitch[pitch] += 1
 
     def _AddHitPitch(self, pitch):
+        if self._lastPitch == pitch:
+            return
         if pitch == "" or pitch == "쉼표":
             return
-        if self._lastHitPitch == pitch:
-            return  # miss는 딱 한번이지만 hit는 막대기 녹이면서 중복 발생함
 
-        self._lastHitPitch = pitch
+        self._lastPitch = pitch
         self._hitCntByPitch[pitch] += 1
 
     def Draw(self):

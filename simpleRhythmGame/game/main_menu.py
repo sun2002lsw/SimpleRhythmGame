@@ -32,17 +32,17 @@ class MainMenu:
         while True:
             self._ClearScreenWithTitle()
             sleep(0.3)
-    
+
             # 악기 선택
             if self._instrumentSelected is False:
                 self._StartInstrumentSelection()
                 continue
-            
+
             # 게임 모드 선택
             if self._gameModeSelected is False:
                 self._StartGameModeSelection()
                 continue
-                
+
             # 악보 선택
             if self._sheetSelected is False:
                 self._StartSheetSelection()
@@ -50,7 +50,7 @@ class MainMenu:
 
             # 모든 선택이 완료됨
             break
-
+            
         # 게임 시작
         instrument, sheet = self._musicManager.GetCurrentMusic()
         self._StartGame(instrument, sheet)
@@ -114,7 +114,13 @@ class MainMenu:
                         pygame.quit()
                         sys.exit()
 
-                    # 화살표: 악기 바꾸기
+                    # 숫자 입력을 화살표 입력으로 전환
+                    if key == pygame.K_1:
+                        key = pygame.K_LEFT
+                    elif key == pygame.K_2:
+                        key = pygame.K_RIGHT
+
+                    # 악기 바꾸기
                     if key == pygame.K_LEFT or key == pygame.K_RIGHT:
                         idxChange = (key - pygame.K_RIGHT) * 2 - 1
                         idxChange = -idxChange  # 이렇게 하면 왼쪽은 -1, 오른쪽은 +1
@@ -131,8 +137,8 @@ class MainMenu:
                         instrumentBox.Clear("white")
                         instrumentBox.Print(curInstrument.Name, 50, True, "black", 255)
 
-                    # 엔터: 악기 선택 완료
-                    if key is pygame.K_RETURN:
+                    # 악기 선택
+                    if key is pygame.K_RETURN or key is pygame.K_0:
                         self._instrumentSelected = True
                         self._musicManager.SelectInstrumentSound()
                         return
@@ -140,10 +146,15 @@ class MainMenu:
     # 게임 모드 선택 과정
     def _StartGameModeSelection(self):
         self._buttons = []
-        self._CreateButton(self._width / 2, self._height * (4 / 8), "박자 연습", self._BeatPractice)
-        self._CreateButton(self._width / 2, self._height * (5 / 8), "음계 연습", self._PitchPractice)
-        self._CreateButton(self._width / 2, self._height * (6 / 8), "악곡 연주", self._PlayMusic)
-        self._CreateButton(self._width / 2, self._height * (7 / 8), "악곡 감상", self._ListenMusic)
+        self._CreateButton(self._width / 2, self._ButtonHeight(1), "박자 연습", self._BeatPractice)
+        self._CreateButton(self._width / 2, self._ButtonHeight(2), "음계 연습", self._PitchPractice)
+        self._CreateButton(self._width / 2, self._ButtonHeight(3), "악곡 연주", self._PlayMusic)
+        self._CreateButton(self._width / 2, self._ButtonHeight(4), "악곡 감상", self._ListenMusic)
+
+        # 마우스 위치 초기화
+        x = self._width / 2
+        y = (self._ButtonHeight(2) + self._ButtonHeight(3)) / 2
+        pygame.mouse.set_pos(x, y)
 
         # 마우스로 버튼 클릭하기
         while True:
@@ -151,21 +162,34 @@ class MainMenu:
             mousePressMove = pygame.mouse.get_pressed()
             mouseLeftPressMove = mousePressMove[0]  # 왼쪽 마우스를 누르고 움직일 때
 
+            keys = pygame.key.get_pressed()
+            keyboardPressing = keys[pygame.K_0]
+
             for event in pygame.event.get():
-                # esc: 뒤로 가기
+                # esc 눌러서 뒤로 가기
+                escClick = event.type == pygame.KEYDOWN and event.key is pygame.K_ESCAPE
+                if escClick:
+                    self._instrumentSelected = False
+                    self._musicManager.CancelInstrumentSound()
+                    return
+
+                # 숫자 입력을 버튼 선택으로 전환
                 if event.type == pygame.KEYDOWN:
-                    if event.key is pygame.K_ESCAPE:
-                        self._instrumentSelected = False
-                        self._musicManager.CancelInstrumentSound()
+                    i = event.key - pygame.K_0
+                    if 1 <= i <= 4:
+                        pygame.mouse.set_pos(x, self._ButtonHeight(i))
+
+                # 선택에 따른 행동 진행
+                keyboardSelect = event.type == pygame.KEYUP and event.key is pygame.K_0
+                mouseSelect = event.type == pygame.MOUSEBUTTONUP
+                if keyboardSelect or mouseSelect:
+                    if self._HandleButtonClick(mousePos):
                         return
 
-                # 마우스로 뭔가 선택
-                if event.type == pygame.MOUSEBUTTONUP:
-                    if self._HandleButtonClick(mousePos):
-                        return  # 뭔가 행동 하나 진행
-                
-                # 마우스로 뭔가를 누르는 순간이나 움직이는 순간에 대한 이펙트 처리
-                if event.type == pygame.MOUSEBUTTONDOWN or mouseLeftPressMove:
+                # 누르는 순간이나 누르고 움직이는 순간에 대한 이펙트 처리
+                keyboardPress = event.type == pygame.KEYDOWN and event.key is pygame.K_0
+                mousePress = event.type == pygame.MOUSEBUTTONDOWN
+                if keyboardPress or keyboardPressing or mousePress or mouseLeftPressMove:
                     self._HandleButtonPressing(mousePos)
                 else:
                     self._HandleButtonHovering(mousePos)
@@ -174,6 +198,10 @@ class MainMenu:
     def _CreateButton(self, x, y, text, clickFunc):
         button = ui.Button(self._screen, x, y, text, clickFunc)
         self._buttons.append(button)
+
+    # i번째 버튼의 높이
+    def _ButtonHeight(self, i):
+        return self._height * (3 + i) / 8
 
     # 마우스를 버튼 위에 올렸을 때 처리
     def _HandleButtonHovering(self, mousePos):
@@ -202,7 +230,7 @@ class MainMenu:
         beatSheet = self._musicManager.GetInstrumentFirstSheet(beatInstrumentName)
 
         self._StartGame(beatInstrument, beatSheet)
-                
+
     # 음계 연습 (지정된 악보를 연주)
     def _PitchPractice(self):
         _, curSheet = self._musicManager.GetCurrentMusic()
@@ -232,7 +260,7 @@ class MainMenu:
             if "Practice" not in curSheet.Name:
                 break
             self._musicManager.ChangeSheet(1)
-                
+
         # 메뉴 그리기
         x = self._width * (1 / 2)
         y = self._height * (1 / 2)
@@ -268,7 +296,13 @@ class MainMenu:
                         self._musicManager.CancelInstrumentSound()
                         return
 
-                    # 화살표: 악보 바꾸기
+                    # 숫자 입력을 화살표 입력으로 전환
+                    if key == pygame.K_1:
+                        key = pygame.K_LEFT
+                    elif key == pygame.K_2:
+                        key = pygame.K_RIGHT
+
+                    # 악보 바꾸기
                     if key == pygame.K_LEFT or key == pygame.K_RIGHT:
                         self._musicManager.ChangeSheetSound()
 
@@ -286,8 +320,8 @@ class MainMenu:
                         sheetBox.Clear("white")
                         sheetBox.Print(curSheet.Name, 50, True, "black", 255)
 
-                    # 엔터: 악보 선택 완료
-                    if key is pygame.K_RETURN:
+                    # 악보 선택
+                    if key is pygame.K_RETURN or key is pygame.K_0:
                         self._sheetSelected = True
                         self._musicManager.SelectInstrumentSound()
                         return

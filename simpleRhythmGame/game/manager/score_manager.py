@@ -129,7 +129,11 @@ class ScoreManager:
             rank = i + 1
             nextY = y + rank * yOffset
 
-            pitchInfo = sortedByAccuracy[i]
+            try:
+                pitchInfo = sortedByAccuracy[i]
+            except IndexError:
+                continue
+
             pitch = pitchInfo[0]
             accuracy = pitchInfo[1][2]
 
@@ -147,7 +151,11 @@ class ScoreManager:
             rank = i + 1
             nextY = y + rank * yOffset
 
-            pitchInfo = sortedByAccuracy[-rank]
+            try:
+                pitchInfo = sortedByAccuracy[-rank]
+            except IndexError:
+                continue
+
             pitch = pitchInfo[0]
             accuracy = pitchInfo[1][2]
 

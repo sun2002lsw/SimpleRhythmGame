@@ -104,19 +104,55 @@ class ScoreManager:
         sortedByAccuracy = sorted(sortedByTotalCnt, key=lambda items: items[1][2], reverse=True)
 
         # 음표별 결과 쓰기
-        widthOffset = self._width / (pitchCnt + 1)
-        y = self._height * (1 / 8)
-        yOffset = self._height / 16
+        widthOffset = self._width / ((pitchCnt + 3) * 2)
+        boxWidth = 2 * widthOffset
 
+        heightOffset = self._height / 4 / 6
+        boxHeight = 2 * heightOffset
+
+        beginX = boxWidth
+        endX = self._width - boxWidth
+
+        beginY = boxHeight
+        endY = beginY + 2 * boxHeight
+        middleY = (beginY + endY) / 2
+
+        textY1 = beginY + heightOffset
+        textY2 = textY1 + boxHeight
+
+        # 사각 틀을 그리기 전에 표기용 칸부터 색칠한다 (사각 틀 경계선이 색칠칸 위에 출력 되도록)
+        rect = pygame.Rect(beginX, beginY, boxWidth, 2 * boxHeight)
+        pygame.draw.rect(self._screen, "aqua", rect)
+
+        # 사각 틀 그리기
+        pygame.draw.line(self._screen, "white", (beginX, beginY), (beginX, endY), 3)
+        pygame.draw.line(self._screen, "white", (beginX, beginY), (endX, beginY), 3)
+        pygame.draw.line(self._screen, "white", (beginX, endY), (endX, endY), 3)
+        pygame.draw.line(self._screen, "white", (endX, beginY), (endX, endY), 3)
+
+        # 틀 안에 경계선 그리기
+        pygame.draw.line(self._screen, "white", (beginX, middleY), (endX, middleY), 1)
+        for i in range(pitchCnt):
+            x = beginX + (i + 1) * boxWidth
+            pygame.draw.line(self._screen, "white", (x, beginY), (x, endY), 1)
+
+        pygame.display.flip()
+
+        # 가장 왼쪽 상자는 표기용 상자
+        x = beginX + widthOffset
+        TextBox(self._screen, x, textY1).Print("계이름", 35, True, "white", 255)
+        TextBox(self._screen, x, textY2).Print("맞춤/전체", 25, True, "white", 255)
+
+        # 나머지 상자들 채워 넣기
         for i, pitchInfo in enumerate(sortedByAccuracy):
-            x = (i + 1) * widthOffset
             pitchStr = pitchInfo[0]
             hitCnt = pitchInfo[1][0]
             totlaCnt = pitchInfo[1][1]
             resultStr = str(hitCnt) + "/" + str(totlaCnt)
 
-            TextBox(self._screen, x, y).Print(pitchStr, 30, True, "yellow", 255)
-            TextBox(self._screen, x, y + yOffset).Print(resultStr, 30, True, "white", 255)
+            x = (2 + i) * boxWidth + widthOffset
+            TextBox(self._screen, x, textY1).Print(pitchStr, 30, True, "yellow", 255)
+            TextBox(self._screen, x, textY2).Print(resultStr, 30, True, "white", 255)
 
         # 최고의 플레이
         x = self._width * (1 / 3)

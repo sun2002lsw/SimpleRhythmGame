@@ -50,7 +50,7 @@ class MainMenu:
 
             # 모든 선택이 완료됨
             break
-            
+
         # 게임 시작
         instrument, sheet = self._musicManager.GetCurrentMusic()
         self._StartGame(instrument, sheet)

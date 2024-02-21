@@ -109,16 +109,18 @@ class MainMenu:
                 if event.type == pygame.KEYDOWN:
                     key = event.key
 
-                    # esc: 게임 종료
-                    if key is pygame.K_ESCAPE:
-                        pygame.quit()
-                        sys.exit()
-
-                    # 숫자 입력을 화살표 입력으로 전환
+                    # 숫자 입력을 다른 입력으로 전환
                     if key == pygame.K_1:
                         key = pygame.K_LEFT
                     elif key == pygame.K_2:
                         key = pygame.K_RIGHT
+                    elif key == pygame.K_5:
+                        key = pygame.K_ESCAPE
+
+                    # esc: 게임 종료
+                    if key is pygame.K_ESCAPE:
+                        pygame.quit()
+                        sys.exit()
 
                     # 악기 바꾸기
                     if key == pygame.K_LEFT or key == pygame.K_RIGHT:
@@ -167,7 +169,7 @@ class MainMenu:
 
             for event in pygame.event.get():
                 # esc 눌러서 뒤로 가기
-                escClick = event.type == pygame.KEYDOWN and event.key is pygame.K_ESCAPE
+                escClick = event.type == pygame.KEYDOWN and (event.key is pygame.K_ESCAPE or event.key is pygame.K_5)
                 if escClick:
                     self._instrumentSelected = False
                     self._musicManager.CancelInstrumentSound()
@@ -289,18 +291,20 @@ class MainMenu:
                 if event.type == pygame.KEYDOWN:
                     key = event.key
 
+                    # 숫자 입력을 다른 입력으로 전환
+                    if key == pygame.K_1:
+                        key = pygame.K_LEFT
+                    elif key == pygame.K_2:
+                        key = pygame.K_RIGHT
+                    elif key == pygame.K_5:
+                        key = pygame.K_ESCAPE
+
                     # esc: 뒤로 가기
                     if key is pygame.K_ESCAPE:
                         self._autoPlay = False
                         self._gameModeSelected = False
                         self._musicManager.CancelInstrumentSound()
                         return
-
-                    # 숫자 입력을 화살표 입력으로 전환
-                    if key == pygame.K_1:
-                        key = pygame.K_LEFT
-                    elif key == pygame.K_2:
-                        key = pygame.K_RIGHT
 
                     # 악보 바꾸기
                     if key == pygame.K_LEFT or key == pygame.K_RIGHT:

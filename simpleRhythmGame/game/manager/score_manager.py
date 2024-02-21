@@ -122,7 +122,7 @@ class ScoreManager:
 
         # 사각 틀을 그리기 전에 표기용 칸부터 색칠한다 (사각 틀 경계선이 색칠칸 위에 출력 되도록)
         rect = pygame.Rect(beginX, beginY, boxWidth, 2 * boxHeight)
-        pygame.draw.rect(self._screen, "aqua", rect)
+        pygame.draw.rect(self._screen, "pale green", rect)
 
         # 사각 틀 그리기
         pygame.draw.line(self._screen, "white", (beginX, beginY), (beginX, endY), 3)
@@ -140,8 +140,8 @@ class ScoreManager:
 
         # 가장 왼쪽 상자는 표기용 상자
         x = beginX + widthOffset
-        TextBox(self._screen, x, textY1).Print("계이름", 35, True, "white", 255)
-        TextBox(self._screen, x, textY2).Print("맞춤/전체", 25, True, "white", 255)
+        TextBox(self._screen, x, textY1).Print("계이름", 35, True, "black", 255)
+        TextBox(self._screen, x, textY2).Print("성공/전체", 25, True, "black", 255)
 
         # 나머지 상자들 채워 넣기
         for i, pitchInfo in enumerate(sortedByAccuracy):
